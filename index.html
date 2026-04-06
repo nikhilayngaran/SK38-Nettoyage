@@ -1159,10 +1159,78 @@
       .stat-item:not(:last-child)::after { display: none; }
       .stat-number { font-size: 2.5rem; }
     }
+    /* ============================================================
+       WIPE INTRO ANIMATION
+    ============================================================ */
+    #wipe-wrapper {
+      position: relative;
+      height: 200vh;
+      /* sits above everything including the sticky navbar */
+      z-index: 2000;
+    }
+
+    #wipe-canvas {
+      position: sticky;
+      top: 0;
+      display: block;
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* Scroll hint arrow shown before user starts scrolling */
+    #wipe-hint {
+      position: fixed;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+
+    #wipe-hint span {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    #wipe-hint svg {
+      animation: wipe-bounce 1.6s ease-in-out infinite;
+    }
+
+    @keyframes wipe-bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(8px); }
+    }
   </style>
 </head>
 
 <body>
+
+  <!-- ============================================================
+       WIPE INTRO ANIMATION
+  ============================================================ -->
+  <div id="wipe-wrapper">
+    <canvas id="wipe-canvas"></canvas>
+  </div>
+
+  <!-- Scroll hint (hidden once wipe starts) -->
+  <div id="wipe-hint">
+    <span>Défiler</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+         stroke="rgba(255,255,255,0.6)" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
 
   <!-- ============================================================
        NAVBAR
@@ -1884,6 +1952,167 @@
       window.addEventListener('scroll',  updateCinematic, { passive: true });
       window.addEventListener('resize',  updateCinematic, { passive: true });
       updateCinematic(); // initial call
+    })();
+
+    /* ================================================================
+       WIPE INTRO ANIMATION
+    ================================================================ */
+    (function () {
+      const wrapper  = document.getElementById('wipe-wrapper');
+      const canvas   = document.getElementById('wipe-canvas');
+      const hint     = document.getElementById('wipe-hint');
+      const ctx      = canvas.getContext('2d');
+
+      // ── Image loading ────────────────────────────────────────────
+      const foamImg   = new Image();
+      const revealImg = new Image();
+      let   imagesReady = 0;
+      let   animReady   = false;
+
+      function onImageLoad() {
+        imagesReady++;
+        if (imagesReady === 2) {
+          animReady = true;
+          resizeCanvas();
+          drawFrame(getCurrentProgress());
+        }
+      }
+
+      foamImg.onload   = onImageLoad;
+      revealImg.onload = onImageLoad;
+      foamImg.onerror  = onImageLoad; // graceful: skip missing image
+      revealImg.onerror = onImageLoad;
+      foamImg.src   = 'images/foam.png';
+      revealImg.src = 'images/reveal.png';
+
+      // ── Canvas sizing ─────────────────────────────────────────────
+      function resizeCanvas() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+        if (animReady) drawFrame(getCurrentProgress());
+      }
+
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+
+      // ── Cover-fit helper (object-fit: cover logic) ────────────────
+      function drawCover(image) {
+        if (!image || !image.naturalWidth) return;
+
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const iw = image.naturalWidth;
+        const ih = image.naturalHeight;
+
+        const scale = Math.max(cw / iw, ch / ih);
+        const sw    = iw * scale;
+        const sh    = ih * scale;
+        const sx    = (cw - sw) / 2;
+        const sy    = (ch - sh) / 2;
+
+        ctx.drawImage(image, sx, sy, sw, sh);
+      }
+
+      // ── Offscreen canvas for foam alpha masking ───────────────────
+      function drawFrame(progress) {
+        const cw = canvas.width;
+        const ch = canvas.height;
+
+        ctx.clearRect(0, 0, cw, ch);
+
+        // Layer 1 — reveal image (always full canvas)
+        drawCover(revealImg);
+
+        // Layer 2 — foam with feathered left edge erased
+        const wipeX    = progress * cw;          // moves 0 → cw
+        const feather  = 40;                     // soft edge width (px)
+        const edgeLeft  = wipeX - feather;
+        const edgeRight = wipeX + feather;
+
+        // Only draw foam if it's still partially covering the screen
+        if (wipeX < cw + feather) {
+          // Render foam into an off-screen canvas so we can mask it
+          const off    = document.createElement('canvas');
+          off.width    = cw;
+          off.height   = ch;
+          const offCtx = off.getContext('2d');
+
+          // Draw foam to offscreen
+          offCtx.drawImage(canvas, 0, 0); // snapshot current state (has reveal already)
+          offCtx.clearRect(0, 0, cw, ch);
+          // Draw foam image to offscreen
+          (function () {
+            if (!foamImg || !foamImg.naturalWidth) return;
+            const iw = foamImg.naturalWidth;
+            const ih = foamImg.naturalHeight;
+            const scale = Math.max(cw / iw, ch / ih);
+            const sw = iw * scale;
+            const sh = ih * scale;
+            const sx = (cw - sw) / 2;
+            const sy = (ch - sh) / 2;
+            offCtx.drawImage(foamImg, sx, sy, sw, sh);
+          })();
+
+          // Apply alpha mask: erase left-of-wipe using destination-in + gradient
+          offCtx.globalCompositeOperation = 'destination-in';
+          const grad = offCtx.createLinearGradient(edgeLeft, 0, edgeRight, 0);
+          grad.addColorStop(0, 'rgba(0,0,0,0)'); // transparent: foam erased
+          grad.addColorStop(1, 'rgba(0,0,0,1)'); // opaque: foam kept
+          offCtx.fillStyle = grad;
+          offCtx.fillRect(0, 0, cw, ch);
+
+          // Composite masked foam on top of reveal
+          ctx.drawImage(off, 0, 0);
+        }
+      }
+
+      // ── Scroll progress ───────────────────────────────────────────
+      function getCurrentProgress() {
+        const scrollable = wrapper.offsetHeight - window.innerHeight; // 200vh - 100vh = 100vh
+        const raw        = window.scrollY / scrollable;
+        return Math.min(Math.max(raw, 0), 1);
+      }
+
+      // ── Auto-scroll to hero once wipe is done ─────────────────────
+      let wipeDone = false;
+
+      function maybeAutoScroll(progress) {
+        if (progress >= 1 && !wipeDone) {
+          wipeDone = true;
+          // Small pause before jumping so the final frame is visible
+          setTimeout(() => {
+            const hero = document.getElementById('hero');
+            if (hero) {
+              hero.scrollIntoView({ behavior: 'smooth' });
+            }
+          }, 300);
+        }
+      }
+
+      // ── Scroll handler ────────────────────────────────────────────
+      function onScroll() {
+        if (!animReady) return;
+
+        const progress = getCurrentProgress();
+
+        // Hide scroll hint once user starts scrolling
+        if (progress > 0.04) {
+          hint.style.opacity = '0';
+          hint.style.pointerEvents = 'none';
+        } else {
+          hint.style.opacity = '1';
+        }
+
+        drawFrame(progress);
+        maybeAutoScroll(progress);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // Initial hint: hide if page was refreshed mid-scroll
+      if (window.scrollY > 10) {
+        hint.style.opacity = '0';
+      }
+
     })();
   </script>
 
