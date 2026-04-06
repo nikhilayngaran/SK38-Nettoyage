@@ -386,6 +386,30 @@
       max-width: 720px;
     }
 
+    /* ---- Hero entrance animation ---- */
+    @keyframes heroFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-animate {
+      opacity: 0;
+      animation: heroFadeUp 0.6s ease-out forwards;
+    }
+
+    .hero-animate--1 { animation-delay: 0ms;   }
+    .hero-animate--2 { animation-delay: 150ms;  }
+    .hero-animate--3 { animation-delay: 300ms;  }
+    .hero-animate--4 { animation-delay: 450ms;  }
+    .hero-animate--5 { animation-delay: 600ms;  }
+    .hero-animate--6 { animation-delay: 750ms;  }
+
     .hero-badge {
       display: inline-flex;
       align-items: center;
@@ -458,11 +482,22 @@
       border-radius: var(--radius-md);
       padding: 40px 32px;
       box-shadow: var(--shadow);
-      transition: transform var(--transition), box-shadow var(--transition);
       border: 1px solid rgba(0,0,0,0.04);
+      /* scroll-in state */
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.5s ease-out,
+                  transform 0.5s ease-out,
+                  box-shadow var(--transition);
     }
 
-    .service-card:hover {
+    .service-card.card-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* hover lift — only active once card is visible */
+    .service-card.card-visible:hover {
       transform: translateY(-6px);
       box-shadow: var(--shadow-md);
     }
@@ -471,6 +506,11 @@
       font-size: 2.8rem;
       margin-bottom: 22px;
       display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.2);
     }
 
     .service-card h3 {
@@ -951,6 +991,77 @@
       .contact-info-block { padding: 28px 20px; flex-direction: column; gap: 24px; text-align: center; }
       .contact-info-item { flex-direction: column; text-align: center; }
     }
+
+    /* ============================================================
+       STATS BAR
+    ============================================================ */
+    .stats-bar {
+      background: var(--secondary);
+      padding: 56px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 12px 24px;
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .stat-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stat-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 52px;
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .stat-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .stat-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .stat-item:not(:last-child)::after { display: none; }
+      .stat-number { font-size: 2.5rem; }
+    }
   </style>
 </head>
 
@@ -989,19 +1100,19 @@
     <div class="hero-pattern"></div>
     <div class="container">
       <div class="hero-content">
-        <div class="hero-badge">
+        <div class="hero-badge hero-animate hero-animate--1">
           🧹 Grenoble &amp; Isère
         </div>
-        <h1>SK38<span> Nettoyage</span></h1>
-        <h2>Votre partenaire propreté à Grenoble</h2>
-        <p>Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
+        <h1 class="hero-animate hero-animate--2">SK38<span> Nettoyage</span></h1>
+        <h2 class="hero-animate hero-animate--3">Votre partenaire propreté à Grenoble</h2>
+        <p class="hero-animate hero-animate--4">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
 
-        <div class="hero-ctas">
+        <div class="hero-ctas hero-animate hero-animate--5">
           <a href="#contact" class="btn btn-primary">Demander un devis</a>
           <a href="#contact" class="btn btn-outline">Être rappelé</a>
         </div>
 
-        <p class="hero-tagline">La propreté qui fait la différence !</p>
+        <p class="hero-tagline hero-animate hero-animate--6">La propreté qui fait la différence !</p>
       </div>
     </div>
   </section>
@@ -1015,7 +1126,7 @@
         <h2>Nettoyage professionnel pour chaque espace</h2>
       </div>
 
-      <div class="services-grid stagger-children">
+      <div class="services-grid" id="services-grid">
         <div class="service-card">
           <span class="service-icon">🏫</span>
           <h3>Écoles &amp; Établissements scolaires</h3>
@@ -1069,6 +1180,28 @@
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       STATS BAR
+  ============================================================ -->
+  <div class="stats-bar" id="stats-bar">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-number" data-target="500" data-suffix="+">0</span>
+          <span class="stat-label">Interventions réalisées</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-target="38">0</span>
+          <span class="stat-label">Département de l'Isère</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number" data-text="7j/7">7j/7</span>
+          <span class="stat-label">Disponibilité</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================================
        ZONE D'INTERVENTION
@@ -1452,6 +1585,73 @@
 
     handleFormSubmit('form-devis',  'success-devis');
     handleFormSubmit('form-rappel', 'success-rappel');
+
+    /* ---- Stats bar counter animation ---- */
+    function animateCounter(el, target, duration, suffix) {
+      const start     = performance.now();
+      const startVal  = 0;
+
+      function tick(now) {
+        const elapsed  = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease-out cubic
+        const eased    = 1 - Math.pow(1 - progress, 3);
+        const current  = Math.round(startVal + (target - startVal) * eased);
+        el.textContent = current + (suffix || '');
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    const statsBar   = document.getElementById('stats-bar');
+    const statItems  = statsBar.querySelectorAll('.stat-item');
+    let   statsPlayed = false;
+
+    const statsObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !statsPlayed) {
+          statsPlayed = true;
+
+          statItems.forEach((item, i) => {
+            // Stagger the fade-in slightly
+            setTimeout(() => item.classList.add('visible'), i * 120);
+          });
+
+          // Counter: 500+
+          const el500 = statsBar.querySelector('[data-target="500"]');
+          setTimeout(() => animateCounter(el500, 500, 2000, '+'), 0);
+
+          // Counter: 38
+          const el38  = statsBar.querySelector('[data-target="38"]');
+          setTimeout(() => animateCounter(el38, 38, 1500, ''), 0);
+
+          // "7j/7" — already shows the text, just let the fade-in handle it
+
+          statsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+
+    statsObserver.observe(statsBar);
+
+    /* ---- Service cards stagger animation ---- */
+    const servicesGrid  = document.getElementById('services-grid');
+    const serviceCards  = servicesGrid.querySelectorAll('.service-card');
+    const cardDelays    = [0, 150, 300];
+
+    const cardsObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          serviceCards.forEach((card, i) => {
+            setTimeout(() => card.classList.add('card-visible'), cardDelays[i]);
+          });
+          cardsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.15 });
+
+    cardsObserver.observe(servicesGrid);
   </script>
 
 </body>
