@@ -1105,6 +1105,7 @@
     }
 
     /* Text overlay */
+    /* Full-screen dark gradient so left side is always readable */
     #seq-overlay {
       position: absolute;
       inset: 0;
@@ -1113,22 +1114,40 @@
       align-items: flex-start;
       justify-content: center;
       z-index: 10;
-      /* pointer-events enabled so buttons are clickable */
       opacity: 0;
       transition: opacity 0.9s ease;
       padding: 0 clamp(24px, 6vw, 120px);
+      /* strong left-to-right dark veil */
+      background: linear-gradient(
+        105deg,
+        rgba(0,0,0,0.82) 0%,
+        rgba(0,0,0,0.65) 45%,
+        rgba(0,0,0,0.15) 75%,
+        rgba(0,0,0,0)    100%
+      );
     }
 
     #seq-overlay.active {
       pointer-events: auto;
     }
 
+    /* Inner content card — subtle frosted glass panel */
+    #seq-overlay-inner {
+      max-width: 580px;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 44px);
+    }
+
     #seq-overlay-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(245,166,35,0.18);
-      border: 1px solid rgba(245,166,35,0.35);
+      background: rgba(245,166,35,0.2);
+      border: 1px solid rgba(245,166,35,0.45);
       color: #F5A623;
       padding: 6px 16px;
       border-radius: 100px;
@@ -1137,57 +1156,56 @@
       font-weight: 600;
       letter-spacing: 0.8px;
       text-transform: uppercase;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     #seq-overlay h1 {
       font-family: 'Poppins', sans-serif;
-      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-size: clamp(2.4rem, 5.5vw, 4rem);
       font-weight: 800;
       color: #FFFFFF;
       line-height: 1.1;
-      margin: 0 0 14px;
-      text-shadow: 0 2px 32px rgba(0,0,0,0.7);
+      margin: 0 0 12px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.9);
     }
 
     #seq-overlay h1 span { color: #F5A623; }
 
     #seq-overlay h2 {
       font-family: 'Poppins', sans-serif;
-      font-size: clamp(1.1rem, 2.4vw, 1.45rem);
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
       font-weight: 500;
-      color: rgba(255,255,255,0.8);
-      margin: 0 0 18px;
-      text-shadow: 0 1px 12px rgba(0,0,0,0.6);
+      color: rgba(255,255,255,0.9);
+      margin: 0 0 14px;
+      text-shadow: 0 1px 10px rgba(0,0,0,0.8);
     }
 
     #seq-overlay-body {
       font-family: 'Inter', sans-serif;
-      font-size: clamp(0.92rem, 1.4vw, 1.05rem);
-      color: rgba(255,255,255,0.6);
-      max-width: 480px;
+      font-size: clamp(0.88rem, 1.3vw, 1rem);
+      color: rgba(255,255,255,0.75);
       line-height: 1.75;
-      margin-bottom: 36px;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+      margin-bottom: 32px;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.7);
     }
 
     #seq-overlay-ctas {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 28px;
+      margin-bottom: 22px;
     }
 
     #seq-overlay-tagline {
       font-family: 'Poppins', sans-serif;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: #F5A623;
       letter-spacing: 0.3px;
-      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
     }
 
     @media (max-width: 600px) {
+      #seq-overlay-inner { padding: 22px 18px; }
       #seq-overlay-ctas { flex-direction: column; }
       #seq-overlay-ctas .btn { justify-content: center; }
     }
@@ -1286,15 +1304,17 @@
 
       <!-- Text overlay — fades in at 65% scroll progress -->
       <div id="seq-overlay">
-        <div id="seq-overlay-badge">🧹 Grenoble &amp; Isère</div>
-        <h1>SK38<span> Nettoyage</span></h1>
-        <h2>Votre partenaire propreté à Grenoble</h2>
-        <p id="seq-overlay-body">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
-        <div id="seq-overlay-ctas">
-          <a href="#contact" class="btn btn-primary">Demander un devis</a>
-          <a href="#contact" class="btn btn-outline">Être rappelé</a>
+        <div id="seq-overlay-inner">
+          <div id="seq-overlay-badge">🧹 Grenoble &amp; Isère</div>
+          <h1>SK38<span> Nettoyage</span></h1>
+          <h2>Votre partenaire propreté à Grenoble</h2>
+          <p id="seq-overlay-body">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
+          <div id="seq-overlay-ctas">
+            <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            <a href="#contact" class="btn btn-outline">Être rappelé</a>
+          </div>
+          <p id="seq-overlay-tagline">La propreté qui fait la différence !</p>
         </div>
-        <p id="seq-overlay-tagline">La propreté qui fait la différence !</p>
       </div>
     </div>
   </div>
