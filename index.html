@@ -1188,31 +1188,86 @@
       inset: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       z-index: 10;
-      pointer-events: none;
+      /* pointer-events enabled so buttons are clickable */
       opacity: 0;
-      transition: opacity 0.8s ease;
+      transition: opacity 0.9s ease;
+      padding: 0 clamp(24px, 6vw, 120px);
     }
+
+    #seq-overlay.active {
+      pointer-events: auto;
+    }
+
+    #seq-overlay-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,166,35,0.18);
+      border: 1px solid rgba(245,166,35,0.35);
+      color: #F5A623;
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+
+    #seq-overlay h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 800;
+      color: #FFFFFF;
+      line-height: 1.1;
+      margin: 0 0 14px;
+      text-shadow: 0 2px 32px rgba(0,0,0,0.7);
+    }
+
+    #seq-overlay h1 span { color: #F5A623; }
 
     #seq-overlay h2 {
       font-family: 'Poppins', sans-serif;
-      font-size: clamp(2.4rem, 6vw, 4rem);
-      font-weight: 800;
-      color: #F5A623;
-      margin: 0 0 12px;
-      text-shadow: 0 2px 24px rgba(0,0,0,0.5);
-      text-align: center;
+      font-size: clamp(1.1rem, 2.4vw, 1.45rem);
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      margin: 0 0 18px;
+      text-shadow: 0 1px 12px rgba(0,0,0,0.6);
     }
 
-    #seq-overlay p {
+    #seq-overlay-body {
       font-family: 'Inter', sans-serif;
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: #FFFFFF;
-      margin: 0;
-      text-shadow: 0 2px 16px rgba(0,0,0,0.6);
-      text-align: center;
+      font-size: clamp(0.92rem, 1.4vw, 1.05rem);
+      color: rgba(255,255,255,0.6);
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 36px;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+    }
+
+    #seq-overlay-ctas {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    #seq-overlay-tagline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #F5A623;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+    }
+
+    @media (max-width: 600px) {
+      #seq-overlay-ctas { flex-direction: column; }
+      #seq-overlay-ctas .btn { justify-content: center; }
     }
 
     /* Loading screen */
@@ -1307,10 +1362,17 @@
     <div id="seq-sticky">
       <canvas id="seq-canvas"></canvas>
 
-      <!-- Text overlay — fades in at 70% scroll -->
+      <!-- Text overlay — fades in at 65% scroll progress -->
       <div id="seq-overlay">
-        <h2>SK38 Nettoyage</h2>
-        <p>Votre partenaire propreté à Grenoble</p>
+        <div id="seq-overlay-badge">🧹 Grenoble &amp; Isère</div>
+        <h1>SK38<span> Nettoyage</span></h1>
+        <h2>Votre partenaire propreté à Grenoble</h2>
+        <p id="seq-overlay-body">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
+        <div id="seq-overlay-ctas">
+          <a href="#contact" class="btn btn-primary">Demander un devis</a>
+          <a href="#contact" class="btn btn-outline">Être rappelé</a>
+        </div>
+        <p id="seq-overlay-tagline">La propreté qui fait la différence !</p>
       </div>
     </div>
   </div>
@@ -1330,7 +1392,7 @@
   ============================================================ -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="#hero" class="nav-logo">SK38 Nettoyage</a>
+      <a href="#services" class="nav-logo">SK38 Nettoyage</a>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#services"  class="nav-link">Services</a></li>
@@ -1350,30 +1412,6 @@
       </button>
     </div>
   </nav>
-
-  <!-- ============================================================
-       HERO
-  ============================================================ -->
-  <section class="hero" id="hero">
-    <div class="hero-pattern"></div>
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-badge hero-animate hero-animate--1">
-          🧹 Grenoble &amp; Isère
-        </div>
-        <h1 class="hero-animate hero-animate--2">SK38<span> Nettoyage</span></h1>
-        <h2 class="hero-animate hero-animate--3">Votre partenaire propreté à Grenoble</h2>
-        <p class="hero-animate hero-animate--4">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
-
-        <div class="hero-ctas hero-animate hero-animate--5">
-          <a href="#contact" class="btn btn-primary">Demander un devis</a>
-          <a href="#contact" class="btn btn-outline">Être rappelé</a>
-        </div>
-
-        <p class="hero-tagline hero-animate hero-animate--6">La propreté qui fait la différence !</p>
-      </div>
-    </div>
-  </section>
 
   <!-- ============================================================
        CINEMATIC TEXT SECTION
@@ -2144,7 +2182,7 @@
         if (progress >= 1 && !seqDone) {
           seqDone = true;
           setTimeout(function () {
-            var hero = document.getElementById('hero');
+            var hero = document.getElementById('services');
             if (hero) hero.scrollIntoView({ behavior: 'smooth' });
           }, 350);
         }
@@ -2163,8 +2201,12 @@
 
           paintFrame(getFrameIndex());
 
-          // Text overlay fades in at 70% scroll progress
-          overlay.style.opacity = progress >= 0.70 ? '1' : '0';
+          // Text overlay fades in at 65% scroll progress
+          var overlayVisible = progress >= 0.65;
+          overlay.style.opacity = overlayVisible ? '1' : '0';
+          // Enable button clicks only when overlay is visible
+          if (overlayVisible) overlay.classList.add('active');
+          else overlay.classList.remove('active');
 
           // Scroll hint disappears once user starts scrolling
           hint.style.opacity = progress > 0.03 ? '0' : '1';
