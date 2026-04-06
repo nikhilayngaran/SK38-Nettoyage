@@ -1160,25 +1160,104 @@
       .stat-number { font-size: 2.5rem; }
     }
     /* ============================================================
-       WIPE INTRO ANIMATION
+       SEQUENCE INTRO ANIMATION
     ============================================================ */
-    #wipe-wrapper {
+    #seq-wrapper {
       position: relative;
-      height: 200vh;
-      /* sits above everything including the sticky navbar */
+      height: 300vh;
       z-index: 2000;
     }
 
-    #wipe-canvas {
+    #seq-sticky {
       position: sticky;
       top: 0;
-      display: block;
-      width: 100%;
       height: 100vh;
+      width: 100%;
+      overflow: hidden;
     }
 
-    /* Scroll hint arrow shown before user starts scrolling */
-    #wipe-hint {
+    #seq-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Text overlay */
+    #seq-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    #seq-overlay h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 800;
+      color: #F5A623;
+      margin: 0 0 12px;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    #seq-overlay p {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: #FFFFFF;
+      margin: 0;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+
+    /* Loading screen */
+    #seq-loader {
+      position: fixed;
+      inset: 0;
+      background: #1A1A1A;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      transition: opacity 0.6s ease;
+    }
+
+    #seq-loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #seq-loader span {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .seq-spinner {
+      width: 44px;
+      height: 44px;
+      border: 3px solid rgba(245,166,35,0.2);
+      border-top-color: #F5A623;
+      border-radius: 50%;
+      animation: seq-spin 0.9s linear infinite;
+    }
+
+    @keyframes seq-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Scroll hint */
+    #seq-hint {
       position: fixed;
       bottom: 36px;
       left: 50%;
@@ -1188,45 +1267,59 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      opacity: 1;
+      opacity: 0;
       transition: opacity 0.6s ease;
       pointer-events: none;
     }
 
-    #wipe-hint span {
+    #seq-hint span {
       font-family: 'Poppins', sans-serif;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.55);
     }
 
-    #wipe-hint svg {
-      animation: wipe-bounce 1.6s ease-in-out infinite;
+    #seq-hint svg {
+      animation: seq-bounce 1.6s ease-in-out infinite;
     }
 
-    @keyframes wipe-bounce {
+    @keyframes seq-bounce {
       0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(8px); }
+      50%       { transform: translateY(7px); }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ============================================================
-       WIPE INTRO ANIMATION
-  ============================================================ -->
-  <div id="wipe-wrapper">
-    <canvas id="wipe-canvas"></canvas>
+  <!-- Loading screen -->
+  <div id="seq-loader">
+    <div class="seq-spinner"></div>
+    <span id="seq-loader-text">Chargement…</span>
   </div>
 
-  <!-- Scroll hint (hidden once wipe starts) -->
-  <div id="wipe-hint">
+  <!-- ============================================================
+       SEQUENCE INTRO ANIMATION
+  ============================================================ -->
+  <div id="seq-wrapper">
+    <div id="seq-sticky">
+      <canvas id="seq-canvas"></canvas>
+
+      <!-- Text overlay — fades in at 70% scroll -->
+      <div id="seq-overlay">
+        <h2>SK38 Nettoyage</h2>
+        <p>Votre partenaire propreté à Grenoble</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div id="seq-hint">
     <span>Défiler</span>
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-         stroke="rgba(255,255,255,0.6)" stroke-width="2"
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+         stroke="rgba(255,255,255,0.55)" stroke-width="2.5"
          stroke-linecap="round" stroke-linejoin="round">
       <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
@@ -1955,163 +2048,136 @@
     })();
 
     /* ================================================================
-       WIPE INTRO ANIMATION
+       SEQUENCE INTRO ANIMATION
     ================================================================ */
     (function () {
-      const wrapper  = document.getElementById('wipe-wrapper');
-      const canvas   = document.getElementById('wipe-canvas');
-      const hint     = document.getElementById('wipe-hint');
-      const ctx      = canvas.getContext('2d');
+      const TOTAL_FRAMES = 120;
 
-      // ── Image loading ────────────────────────────────────────────
-      const foamImg   = new Image();
-      const revealImg = new Image();
-      let   imagesReady = 0;
-      let   animReady   = false;
+      const wrapper   = document.getElementById('seq-wrapper');
+      const sticky    = document.getElementById('seq-sticky');
+      const canvas    = document.getElementById('seq-canvas');
+      const overlay   = document.getElementById('seq-overlay');
+      const loader    = document.getElementById('seq-loader');
+      const loaderTxt = document.getElementById('seq-loader-text');
+      const hint      = document.getElementById('seq-hint');
+      const ctx       = canvas.getContext('2d');
 
-      function onImageLoad() {
-        imagesReady++;
-        if (imagesReady === 2) {
-          animReady = true;
-          resizeCanvas();
-          drawFrame(getCurrentProgress());
+      // ── Build filenames ───────────────────────────────────────────
+      const images = [];
+      for (var i = 0; i < TOTAL_FRAMES; i++) {
+        var idx = String(i).padStart(3, '0');
+        var img = new Image();
+        img.src = 'sequence/frame_' + idx + '_delay-0.066s.png';
+        images.push(img);
+      }
+
+      // ── Preload tracking ──────────────────────────────────────────
+      var loaded = 0;
+      var ready  = false;
+
+      images.forEach(function (img) {
+        function done() {
+          loaded++;
+          var pct = Math.round((loaded / TOTAL_FRAMES) * 100);
+          loaderTxt.textContent = 'Chargement\u2026 ' + pct + '%';
+          if (loaded === TOTAL_FRAMES) onAllLoaded();
         }
+        img.onload  = done;
+        img.onerror = done; // count errors so we never hang
+      });
+
+      function onAllLoaded() {
+        ready = true;
+        loader.classList.add('hidden');
+        setTimeout(function () { loader.style.display = 'none'; }, 700);
+        resizeCanvas();
+        paintFrame(0);
+        // Show scroll hint
+        setTimeout(function () {
+          if (window.scrollY < 20) hint.style.opacity = '1';
+        }, 900);
       }
 
-      foamImg.onload   = onImageLoad;
-      revealImg.onload = onImageLoad;
-      foamImg.onerror  = onImageLoad; // graceful: skip missing image
-      revealImg.onerror = onImageLoad;
-      foamImg.src   = 'images/foam.png';
-      revealImg.src = 'images/reveal.png';
-
-      // ── Canvas sizing ─────────────────────────────────────────────
+      // ── Canvas cover-fit ──────────────────────────────────────────
       function resizeCanvas() {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
-        if (animReady) drawFrame(getCurrentProgress());
+        canvas.width  = sticky.offsetWidth;
+        canvas.height = sticky.offsetHeight;
+        if (ready) paintFrame(getFrameIndex());
       }
 
-      window.addEventListener('resize', resizeCanvas, { passive: true });
+      function paintFrame(index) {
+        var img = images[index];
+        if (!img || !img.naturalWidth) return;
 
-      // ── Cover-fit helper (object-fit: cover logic) ────────────────
-      function drawCover(image) {
-        if (!image || !image.naturalWidth) return;
-
-        const cw = canvas.width;
-        const ch = canvas.height;
-        const iw = image.naturalWidth;
-        const ih = image.naturalHeight;
-
-        const scale = Math.max(cw / iw, ch / ih);
-        const sw    = iw * scale;
-        const sh    = ih * scale;
-        const sx    = (cw - sw) / 2;
-        const sy    = (ch - sh) / 2;
-
-        ctx.drawImage(image, sx, sy, sw, sh);
-      }
-
-      // ── Offscreen canvas for foam alpha masking ───────────────────
-      function drawFrame(progress) {
-        const cw = canvas.width;
-        const ch = canvas.height;
+        var cw    = canvas.width;
+        var ch    = canvas.height;
+        var iw    = img.naturalWidth;
+        var ih    = img.naturalHeight;
+        var scale = Math.max(cw / iw, ch / ih);
+        var sw    = iw * scale;
+        var sh    = ih * scale;
+        var dx    = (cw - sw) / 2;
+        var dy    = (ch - sh) / 2;
 
         ctx.clearRect(0, 0, cw, ch);
-
-        // Layer 1 — reveal image (always full canvas)
-        drawCover(revealImg);
-
-        // Layer 2 — foam with feathered left edge erased
-        const wipeX    = progress * cw;          // moves 0 → cw
-        const feather  = 40;                     // soft edge width (px)
-        const edgeLeft  = wipeX - feather;
-        const edgeRight = wipeX + feather;
-
-        // Only draw foam if it's still partially covering the screen
-        if (wipeX < cw + feather) {
-          // Render foam into an off-screen canvas so we can mask it
-          const off    = document.createElement('canvas');
-          off.width    = cw;
-          off.height   = ch;
-          const offCtx = off.getContext('2d');
-
-          // Draw foam to offscreen
-          offCtx.drawImage(canvas, 0, 0); // snapshot current state (has reveal already)
-          offCtx.clearRect(0, 0, cw, ch);
-          // Draw foam image to offscreen
-          (function () {
-            if (!foamImg || !foamImg.naturalWidth) return;
-            const iw = foamImg.naturalWidth;
-            const ih = foamImg.naturalHeight;
-            const scale = Math.max(cw / iw, ch / ih);
-            const sw = iw * scale;
-            const sh = ih * scale;
-            const sx = (cw - sw) / 2;
-            const sy = (ch - sh) / 2;
-            offCtx.drawImage(foamImg, sx, sy, sw, sh);
-          })();
-
-          // Apply alpha mask: erase left-of-wipe using destination-in + gradient
-          offCtx.globalCompositeOperation = 'destination-in';
-          const grad = offCtx.createLinearGradient(edgeLeft, 0, edgeRight, 0);
-          grad.addColorStop(0, 'rgba(0,0,0,0)'); // transparent: foam erased
-          grad.addColorStop(1, 'rgba(0,0,0,1)'); // opaque: foam kept
-          offCtx.fillStyle = grad;
-          offCtx.fillRect(0, 0, cw, ch);
-
-          // Composite masked foam on top of reveal
-          ctx.drawImage(off, 0, 0);
-        }
+        ctx.drawImage(img, dx, dy, sw, sh);
       }
 
-      // ── Scroll progress ───────────────────────────────────────────
-      function getCurrentProgress() {
-        const scrollable = wrapper.offsetHeight - window.innerHeight; // 200vh - 100vh = 100vh
-        const raw        = window.scrollY / scrollable;
+      // ── Scroll math ───────────────────────────────────────────────
+      function getProgress() {
+        var scrollable = wrapper.offsetHeight - window.innerHeight;
+        var raw        = window.scrollY / scrollable;
         return Math.min(Math.max(raw, 0), 1);
       }
 
-      // ── Auto-scroll to hero once wipe is done ─────────────────────
-      let wipeDone = false;
+      function getFrameIndex() {
+        return Math.min(
+          Math.floor(getProgress() * (TOTAL_FRAMES - 1)),
+          TOTAL_FRAMES - 1
+        );
+      }
 
-      function maybeAutoScroll(progress) {
-        if (progress >= 1 && !wipeDone) {
-          wipeDone = true;
-          // Small pause before jumping so the final frame is visible
-          setTimeout(() => {
-            const hero = document.getElementById('hero');
-            if (hero) {
-              hero.scrollIntoView({ behavior: 'smooth' });
-            }
-          }, 300);
+      // ── Auto-scroll when sequence completes ───────────────────────
+      var seqDone = false;
+
+      function maybeFinish(progress) {
+        if (progress >= 1 && !seqDone) {
+          seqDone = true;
+          setTimeout(function () {
+            var hero = document.getElementById('hero');
+            if (hero) hero.scrollIntoView({ behavior: 'smooth' });
+          }, 350);
         }
       }
 
-      // ── Scroll handler ────────────────────────────────────────────
+      // ── Throttled scroll handler via rAF ─────────────────────────
+      var rafPending = false;
+
       function onScroll() {
-        if (!animReady) return;
+        if (!ready || rafPending) return;
+        rafPending = true;
 
-        const progress = getCurrentProgress();
+        requestAnimationFrame(function () {
+          rafPending = false;
+          var progress = getProgress();
 
-        // Hide scroll hint once user starts scrolling
-        if (progress > 0.04) {
-          hint.style.opacity = '0';
-          hint.style.pointerEvents = 'none';
-        } else {
-          hint.style.opacity = '1';
-        }
+          paintFrame(getFrameIndex());
 
-        drawFrame(progress);
-        maybeAutoScroll(progress);
+          // Text overlay fades in at 70% scroll progress
+          overlay.style.opacity = progress >= 0.70 ? '1' : '0';
+
+          // Scroll hint disappears once user starts scrolling
+          hint.style.opacity = progress > 0.03 ? '0' : '1';
+
+          maybeFinish(progress);
+        });
       }
 
       window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', resizeCanvas, { passive: true });
 
-      // Initial hint: hide if page was refreshed mid-scroll
-      if (window.scrollY > 10) {
-        hint.style.opacity = '0';
-      }
+      // Hide hint if page was reloaded mid-scroll
+      if (window.scrollY > 20) hint.style.opacity = '0';
 
     })();
   </script>
