@@ -1000,6 +1000,84 @@
     }
 
     /* ============================================================
+       CINEMATIC TEXT SECTION
+    ============================================================ */
+    .cinematic-section {
+      position: relative;
+      height: 300vh;
+      background: var(--secondary);
+    }
+
+    .cinematic-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .cinematic-stage {
+      position: relative;
+      width: 100%;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .cinematic-line {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      padding: 0 24px;
+      text-align: center;
+      opacity: 0;
+      will-change: opacity, transform;
+      /* prevent FOUC */
+      pointer-events: none;
+    }
+
+    /* Line 1 */
+    .cinematic-line--1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    /* Line 2 */
+    .cinematic-line--2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.6rem, 6.5vw, 4.5rem);
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
+
+    /* Line 3 */
+    .cinematic-line--3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -1px;
+    }
+
+    /* Amber underline for line 3 — animated via JS width */
+    .cinematic-underline {
+      display: block;
+      height: 5px;
+      background: var(--primary);
+      border-radius: 3px;
+      width: 0%;
+      margin: 16px auto 0;
+      will-change: width;
+    }
+
+    /* ============================================================
        MISC RESPONSIVE HELPERS
     ============================================================ */
     @media (max-width: 600px) {
@@ -1135,6 +1213,33 @@
       </div>
     </div>
   </section>
+
+  <!-- ============================================================
+       CINEMATIC TEXT SECTION
+  ============================================================ -->
+  <div class="cinematic-section" id="cinematic-section">
+    <div class="cinematic-sticky">
+      <div class="cinematic-stage">
+
+        <!-- Line 1 -->
+        <div class="cinematic-line cinematic-line--1" id="cine-line-1">
+          La propreté,
+        </div>
+
+        <!-- Line 2 -->
+        <div class="cinematic-line cinematic-line--2" id="cine-line-2">
+          c'est notre métier.
+        </div>
+
+        <!-- Line 3 -->
+        <div class="cinematic-line cinematic-line--3" id="cine-line-3">
+          SK38 Nettoyage.
+          <span class="cinematic-underline" id="cine-underline"></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================================
        SERVICES
@@ -1676,6 +1781,110 @@
     }, { threshold: 0.15 });
 
     cardsObserver.observe(servicesGrid);
+
+    /* ---- Cinematic scroll-driven text animation ---- */
+    (function () {
+      const section   = document.getElementById('cinematic-section');
+      const line1     = document.getElementById('cine-line-1');
+      const line2     = document.getElementById('cine-line-2');
+      const line3     = document.getElementById('cine-line-3');
+      const underline = document.getElementById('cine-underline');
+
+      // Clamp helper
+      function clamp(val, min, max) {
+        return Math.min(Math.max(val, min), max);
+      }
+
+      // Map a value from one range to another
+      function mapRange(val, inMin, inMax, outMin, outMax) {
+        return outMin + ((clamp(val, inMin, inMax) - inMin) / (inMax - inMin)) * (outMax - outMin);
+      }
+
+      // Smooth easing
+      function easeInOut(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      }
+
+      function updateCinematic() {
+        const scrollY      = window.scrollY;
+        const sectionTop   = section.offsetTop;
+        const sectionH     = section.offsetHeight;          // 300vh
+        const viewportH    = window.innerHeight;
+
+        // progress 0→1 over the scrollable distance (300vh - 100vh = 200vh)
+        const scrollable   = sectionH - viewportH;
+        const rawProgress  = (scrollY - sectionTop) / scrollable;
+        const p            = clamp(rawProgress, 0, 1);
+
+        // ── Phase boundaries ──────────────────────────────────────
+        // Line 1 active:  0.00 → 0.33
+        //   fade in  :  0.00 → 0.08
+        //   full vis :  0.08 → 0.25
+        //   fade out :  0.25 → 0.36
+        //
+        // Line 2 active:  0.33 → 0.66
+        //   fade in  :  0.30 → 0.40
+        //   full vis :  0.40 → 0.58
+        //   fade out :  0.58 → 0.68
+        //
+        // Line 3 active:  0.66 → 1.00
+        //   fade in  :  0.64 → 0.74
+        //   full vis :  0.74 → 1.00
+        //   underline:  0.74 → 0.92 (width 0→100%)
+
+        // ── Line 1 ────────────────────────────────────────────────
+        let op1, ty1;
+        if (p <= 0.08) {
+          op1 = easeInOut(mapRange(p, 0, 0.08, 0, 1));
+          ty1 = mapRange(p, 0, 0.08, 22, 0);
+        } else if (p <= 0.25) {
+          op1 = 1; ty1 = 0;
+        } else {
+          op1 = easeInOut(mapRange(p, 0.25, 0.36, 1, 0));
+          ty1 = mapRange(p, 0.25, 0.36, 0, -22);
+        }
+        line1.style.opacity   = op1;
+        line1.style.transform = `translate(-50%, calc(-50% + ${ty1}px))`;
+
+        // ── Line 2 ────────────────────────────────────────────────
+        let op2, ty2;
+        if (p <= 0.30) {
+          op2 = 0; ty2 = 22;
+        } else if (p <= 0.40) {
+          op2 = easeInOut(mapRange(p, 0.30, 0.40, 0, 1));
+          ty2 = mapRange(p, 0.30, 0.40, 22, 0);
+        } else if (p <= 0.58) {
+          op2 = 1; ty2 = 0;
+        } else {
+          op2 = easeInOut(mapRange(p, 0.58, 0.68, 1, 0));
+          ty2 = mapRange(p, 0.58, 0.68, 0, -22);
+        }
+        line2.style.opacity   = op2;
+        line2.style.transform = `translate(-50%, calc(-50% + ${ty2}px))`;
+
+        // ── Line 3 ────────────────────────────────────────────────
+        let op3, ty3;
+        if (p <= 0.64) {
+          op3 = 0; ty3 = 22;
+        } else if (p <= 0.74) {
+          op3 = easeInOut(mapRange(p, 0.64, 0.74, 0, 1));
+          ty3 = mapRange(p, 0.64, 0.74, 22, 0);
+        } else {
+          op3 = 1; ty3 = 0;
+        }
+        line3.style.opacity   = op3;
+        line3.style.transform = `translate(-50%, calc(-50% + ${ty3}px))`;
+
+        // Underline grows after line 3 is fully in
+        const ulPct = mapRange(p, 0.74, 0.92, 0, 100);
+        underline.style.width = ulPct + '%';
+      }
+
+      // Run on scroll + resize (in case section height changes)
+      window.addEventListener('scroll',  updateCinematic, { passive: true });
+      window.addEventListener('resize',  updateCinematic, { passive: true });
+      updateCinematic(); // initial call
+    })();
   </script>
 
 </body>
