@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- SEO Meta Tags -->
+  <!-- SEO -->
   <title>SK38 Nettoyage — Entreprise de nettoyage à Grenoble</title>
   <meta name="description" content="SK38 Nettoyage, votre partenaire propreté à Grenoble et en Isère. Nettoyage professionnel pour écoles, bureaux et commerces. Devis gratuit." />
   <meta name="keywords" content="nettoyage Grenoble, entreprise nettoyage Isère, nettoyage bureaux, nettoyage écoles, SK38 nettoyage" />
@@ -18,7 +18,7 @@
   <meta property="og:locale" content="fr_FR" />
   <meta property="og:site_name" content="SK38 Nettoyage" />
 
-  <!-- Emoji Favicon -->
+  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>" />
 
   <!-- Lucide Icons -->
@@ -31,35 +31,28 @@
 
   <style>
     /* ============================================================
-       CSS RESET & CUSTOM PROPERTIES
+       RESET & VARIABLES
     ============================================================ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary:    #000000;
-      --primary-dark: #333333;
+      --black:      #000000;
+      --dark:       #111111;
       --secondary:  #1A1A1A;
       --bg:         #FFFFFF;
       --bg-alt:     #F5F5F5;
       --text:       #1A1A1A;
       --text-light: #666666;
       --white:      #FFFFFF;
-      --shadow:     0 4px 24px rgba(0,0,0,0.08);
-      --shadow-md:  0 8px 32px rgba(0,0,0,0.12);
+      --shadow:     0 4px 24px rgba(0,0,0,0.07);
+      --shadow-md:  0 8px 32px rgba(0,0,0,0.13);
       --radius-sm:  4px;
       --radius-md:  12px;
-      --transition: 0.3s ease;
+      --t:          0.3s ease;
       --nav-h:      72px;
     }
 
-    html {
-      scroll-behavior: smooth;
-      font-size: 16px;
-    }
+    html { scroll-behavior: smooth; font-size: 16px; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -69,1256 +62,491 @@
       overflow-x: hidden;
     }
 
-    h1, h2, h3, h4 {
-      font-family: 'Poppins', sans-serif;
-      line-height: 1.25;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
+    h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; line-height: 1.25; }
+    a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; }
 
     /* ============================================================
        UTILITIES
     ============================================================ */
-    .container {
-      width: min(1160px, 100% - 2.5rem);
-      margin-inline: auto;
-    }
+    .container { width: min(1160px, 100% - 2.5rem); margin-inline: auto; }
+    .section    { padding: 96px 0; }
+    .section--alt { background: var(--bg-alt); }
 
-    .section {
-      padding: 96px 0;
-    }
-
-    .section--alt {
-      background: var(--bg-alt);
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
+    .section-header { text-align: center; margin-bottom: 56px; }
     .section-header h2 {
       font-size: clamp(1.6rem, 3vw, 2.25rem);
-      font-weight: 700;
-      color: var(--secondary);
-      display: inline-block;
-      position: relative;
-      padding-bottom: 14px;
+      font-weight: 700; color: var(--black);
+      display: inline-block; position: relative; padding-bottom: 14px;
     }
-
     .section-header h2::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 2px;
-      background: #000000;
-      border-radius: 0;
+      content: ''; position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 40px; height: 2px; background: var(--black);
     }
-
     .section-header p {
-      margin-top: 16px;
-      color: var(--text-light);
-      font-size: 1.05rem;
-      max-width: 600px;
-      margin-inline: auto;
+      margin-top: 16px; color: var(--text-light);
+      font-size: 1.05rem; max-width: 600px; margin-inline: auto;
     }
 
-    /* Fade-in animation */
+    /* Scroll fade-up */
     .fade-up {
-      opacity: 0;
-      transform: translateY(32px);
+      opacity: 0; transform: translateY(28px);
       transition: opacity 0.65s ease, transform 0.65s ease;
     }
-
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Stagger children */
-    .stagger-children > * {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.55s ease, transform 0.55s ease;
-    }
-
-    .stagger-children.visible > *:nth-child(1) { transition-delay: 0.05s; opacity:1; transform:none; }
-    .stagger-children.visible > *:nth-child(2) { transition-delay: 0.15s; opacity:1; transform:none; }
-    .stagger-children.visible > *:nth-child(3) { transition-delay: 0.25s; opacity:1; transform:none; }
-    .stagger-children.visible > *:nth-child(4) { transition-delay: 0.35s; opacity:1; transform:none; }
+    .fade-up.visible { opacity: 1; transform: none; }
 
     /* ============================================================
        BUTTONS
     ============================================================ */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 14px 28px;
-      border-radius: var(--radius-sm);
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: background var(--transition), color var(--transition),
-                  transform var(--transition), box-shadow var(--transition),
-                  border-color var(--transition);
-      border: 2px solid transparent;
-      line-height: 1;
-      white-space: nowrap;
-      text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 28px; border-radius: var(--radius-sm);
+      font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.95rem;
+      cursor: pointer; border: 2px solid transparent; white-space: nowrap;
+      transition: background var(--t), color var(--t), transform var(--t),
+                  box-shadow var(--t), border-color var(--t);
     }
 
-    .btn-primary {
-      background: var(--primary);
-      color: var(--white);
-      border-color: var(--primary);
-    }
+    /* Default: light context */
+    .btn-primary { background: var(--black); color: var(--white); border-color: var(--black); }
+    .btn-primary:hover { background: #333; border-color: #333; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.22); }
 
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      border-color: var(--primary-dark);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-    }
+    .btn-outline { background: var(--white); color: var(--black); border-color: var(--black); }
+    .btn-outline:hover { background: var(--black); color: var(--white); transform: translateY(-2px); }
 
-    .btn-outline {
-      background: var(--white);
-      color: var(--secondary);
-      border-color: var(--secondary);
-    }
-
-    .btn-outline:hover {
-      background: var(--secondary);
-      color: var(--white);
-      transform: translateY(-2px);
-    }
+    /* Hero context overrides (dark bg) */
+    .hero .btn-primary { background: var(--white); color: var(--black); border-color: var(--white); }
+    .hero .btn-primary:hover { background: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.9); transform: translateY(-2px); }
+    .hero .btn-outline { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.7); }
+    .hero .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: var(--white); transform: translateY(-2px); }
 
     /* ============================================================
        NAVBAR
     ============================================================ */
     .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
+      position: sticky; top: 0; z-index: 1000;
       background: var(--bg);
-      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.09);
       height: var(--nav-h);
     }
+    .navbar .container { display: flex; align-items: center; justify-content: space-between; height: 100%; }
 
-    .navbar .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 100%;
-    }
+    .nav-logo { display: flex; align-items: center; line-height: 0; }
+    .nav-logo img { height: 40px; width: auto; display: block; filter: invert(1); }
 
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      line-height: 0;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 36px;
-      list-style: none;
-    }
-
+    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
     .nav-links a {
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      font-size: 0.9rem;
-      color: var(--text);
-      position: relative;
-      padding-bottom: 3px;
-      transition: color var(--transition);
+      font-family: 'Inter', sans-serif; font-weight: 500; font-size: 0.9rem;
+      color: var(--text); position: relative; padding-bottom: 3px; transition: color var(--t);
     }
-
     .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
-      transition: width var(--transition);
-      border-radius: 1px;
+      content: ''; position: absolute; bottom: -2px; left: 0;
+      width: 0; height: 2px; background: var(--black); transition: width var(--t);
     }
+    .nav-links a:hover, .nav-links a.active { color: var(--black); }
+    .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
 
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: var(--primary);
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a.active::after {
-      width: 100%;
-    }
-
-    .nav-cta {
-      display: flex;
-      align-items: center;
-    }
+    .nav-cta { display: flex; align-items: center; }
 
     .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 6px;
-      z-index: 1100;
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 6px; z-index: 1100;
     }
-
-    .hamburger span {
-      display: block;
-      width: 25px;
-      height: 2px;
-      background: var(--secondary);
-      border-radius: 2px;
-      transition: transform 0.3s, opacity 0.3s;
-    }
-
-    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger span { display: block; width: 25px; height: 2px; background: var(--black); border-radius: 2px; transition: transform 0.3s, opacity 0.3s; }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
-    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
-    /* Mobile nav */
     @media (max-width: 768px) {
       .hamburger { display: flex; }
-
       .nav-links {
-        position: fixed;
-        top: var(--nav-h);
-        left: 0;
-        right: 0;
-        background: var(--bg);
-        flex-direction: column;
-        align-items: center;
-        gap: 0;
-        padding: 0;
-        max-height: 0;
-        overflow: hidden;
+        position: fixed; top: var(--nav-h); left: 0; right: 0;
+        background: var(--bg); flex-direction: column; align-items: center;
+        gap: 0; max-height: 0; overflow: hidden;
         transition: max-height 0.4s ease, padding 0.3s ease;
         box-shadow: 0 8px 24px rgba(0,0,0,0.08);
       }
-
-      .nav-links.open {
-        max-height: 320px;
-        padding: 20px 0 24px;
-      }
-
+      .nav-links.open { max-height: 320px; padding: 20px 0 24px; }
       .nav-links li { width: 100%; text-align: center; }
-
-      .nav-links a {
-        display: block;
-        padding: 14px 24px;
-        font-size: 1rem;
-      }
-
+      .nav-links a { display: block; padding: 14px 24px; font-size: 1rem; }
       .nav-cta { display: none; }
     }
 
     /* ============================================================
-       HERO
+       HERO — entrance animations
     ============================================================ */
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-animate { opacity: 0; animation: heroFadeUp 0.6s ease-out forwards; }
+    .hero-animate--1 { animation-delay: 0ms; }
+    .hero-animate--2 { animation-delay: 150ms; }
+    .hero-animate--3 { animation-delay: 300ms; }
+    .hero-animate--4 { animation-delay: 450ms; }
+    .hero-animate--5 { animation-delay: 600ms; }
+    .hero-animate--6 { animation-delay: 750ms; }
+
+    /* Hero section */
     .hero {
       min-height: 100vh;
-      background: var(--secondary);
-      display: flex;
-      align-items: center;
+      background-image: url('images/Reff 1.jpg');
+      background-size: cover;
+      background-position: center center;
       position: relative;
-      overflow: hidden;
+      display: flex; align-items: center;
     }
-
-    /* Diagonal amber accent */
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -20%;
-      right: -15%;
-      width: 520px;
-      height: 520px;
-      background: var(--primary);
-      opacity: 0.08;
-      border-radius: 50%;
-      filter: blur(80px);
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -10%;
-      left: -10%;
-      width: 380px;
-      height: 380px;
-      background: var(--primary);
-      opacity: 0.06;
-      border-radius: 50%;
-      filter: blur(60px);
-    }
-
-    /* Subtle grid pattern */
-    .hero-pattern {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 720px;
-    }
-
-    /* ---- Hero entrance animation ---- */
-    @keyframes heroFadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .hero-animate {
-      opacity: 0;
-      animation: heroFadeUp 0.6s ease-out forwards;
-    }
-
-    .hero-animate--1 { animation-delay: 0ms;   }
-    .hero-animate--2 { animation-delay: 150ms;  }
-    .hero-animate--3 { animation-delay: 300ms;  }
-    .hero-animate--4 { animation-delay: 450ms;  }
-    .hero-animate--5 { animation-delay: 600ms;  }
-    .hero-animate--6 { animation-delay: 750ms;  }
+    .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.75); }
+    .hero .container { position: relative; z-index: 1; }
+    .hero-content { max-width: 680px; }
 
     .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: var(--white);
-      padding: 6px 16px;
-      border-radius: 100px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
-      margin-bottom: 24px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white); padding: 6px 16px; border-radius: 100px;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 24px;
     }
-
-    .hero h1 {
-      font-size: clamp(2.8rem, 6vw, 4.5rem);
-      font-weight: 800;
-      color: var(--white);
-      line-height: 1.1;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 span {
-      color: var(--primary);
-    }
-
-    .hero h2 {
-      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
-      font-weight: 500;
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 22px;
-    }
-
-    .hero p {
-      font-size: 1.05rem;
-      color: rgba(255,255,255,0.6);
-      max-width: 520px;
-      margin-bottom: 40px;
-      line-height: 1.75;
-    }
-
-    .hero-ctas {
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 32px;
-    }
-
-    .hero-tagline {
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.3px;
-    }
+    .hero h1 { font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 800; color: var(--white); line-height: 1.1; margin-bottom: 18px; }
+    .hero h2 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 500; color: rgba(255,255,255,0.8); margin-bottom: 22px; }
+    .hero-body { font-size: 1.05rem; color: rgba(255,255,255,0.65); max-width: 520px; margin-bottom: 40px; line-height: 1.75; }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 32px; }
+    .hero-tagline { font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 0.3px; }
 
     /* ============================================================
        SERVICES
     ============================================================ */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
-    }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 
     .service-card {
-      background: var(--bg);
+      background: var(--bg-alt);
       border-radius: var(--radius-md);
-      padding: 40px 32px;
+      overflow: hidden;
       box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,0.04);
-      /* scroll-in state */
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.5s ease-out,
-                  transform 0.5s ease-out,
-                  box-shadow var(--transition);
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out, box-shadow var(--t);
     }
+    .service-card.card-visible { opacity: 1; transform: translateY(0); }
+    .service-card.card-visible:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
 
-    .service-card.card-visible {
-      opacity: 1;
-      transform: translateY(0);
+    .service-card-img { height: 200px; overflow: hidden; }
+    .service-card-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.4s ease;
     }
+    .service-card.card-visible:hover .service-card-img img { transform: scale(1.04); }
 
-    /* hover lift — only active once card is visible */
-    .service-card.card-visible:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-md);
-    }
+    .service-card-body { padding: 32px; }
 
     .service-icon {
-      width: 48px;
-      height: 48px;
-      margin-bottom: 22px;
-      display: block;
-      stroke: #000000;
-      transition: transform 0.3s ease;
+      width: 40px; height: 40px; margin-bottom: 16px; display: block;
+      stroke: var(--black); transition: transform 0.3s ease;
     }
+    .service-card:hover .service-icon { transform: scale(1.2); }
+    .service-card h3 { font-size: 1.1rem; font-weight: 700; color: var(--black); margin-bottom: 12px; }
+    .service-card p { color: var(--text-light); font-size: 0.93rem; line-height: 1.7; }
 
-    .service-card:hover .service-icon {
-      transform: scale(1.2);
-    }
-
-    .service-card h3 {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--secondary);
-      margin-bottom: 14px;
-    }
-
-    .service-card p {
-      color: var(--text-light);
-      font-size: 0.95rem;
-      line-height: 1.7;
-    }
-
-    @media (max-width: 900px) {
-      .services-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 900px) { .services-grid { grid-template-columns: 1fr; } }
 
     /* ============================================================
        POURQUOI NOUS
     ============================================================ */
-    .why-list {
-      display: flex;
-      flex-direction: column;
-      gap: 22px;
-      max-width: 820px;
-      margin-inline: auto;
-    }
-
+    .why-list { display: flex; flex-direction: column; gap: 20px; max-width: 820px; margin-inline: auto; }
     .why-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 24px;
-      background: var(--bg);
-      border: 1px solid rgba(0,0,0,0.06);
-      border-radius: var(--radius-md);
-      padding: 28px 32px;
-      box-shadow: var(--shadow);
-      transition: transform var(--transition), box-shadow var(--transition);
+      display: flex; align-items: flex-start; gap: 24px;
+      background: var(--bg); border: 1px solid rgba(0,0,0,0.07);
+      border-radius: var(--radius-md); padding: 28px 32px; box-shadow: var(--shadow);
+      transition: transform var(--t), box-shadow var(--t);
     }
-
-    .why-item:hover {
-      transform: translateX(4px);
-      box-shadow: var(--shadow-md);
-    }
-
+    .why-item:hover { transform: translateX(4px); box-shadow: var(--shadow-md); }
     .why-icon {
-      flex-shrink: 0;
-      width: 52px;
-      height: 52px;
-      background: rgba(0,0,0,0.06);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      flex-shrink: 0; width: 52px; height: 52px;
+      background: var(--bg-alt); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .why-icon i { width: 28px; height: 28px; stroke: var(--black); }
+    .why-body h3 { font-size: 1.05rem; font-weight: 700; color: var(--black); margin-bottom: 8px; }
+    .why-body p  { color: var(--text-light); font-size: 0.93rem; line-height: 1.7; }
+
+    /* ============================================================
+       STATS BAR
+    ============================================================ */
+    .stats-bar { background: var(--dark); padding: 60px 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+
+    .stat-item {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 12px 24px; position: relative;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .stat-item.visible { opacity: 1; transform: translateY(0); }
+    .stat-item:not(:last-child)::after {
+      content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+      height: 48px; width: 1px; background: rgba(255,255,255,0.1);
+    }
+    .stat-number {
+      font-family: 'Poppins', sans-serif; font-size: 3rem; font-weight: 800;
+      color: var(--white); line-height: 1; margin-bottom: 10px; letter-spacing: -1px;
+    }
+    .stat-label {
+      font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
+      color: #999; text-transform: uppercase; letter-spacing: 0.8px;
     }
 
-    .why-icon i {
-      width: 40px;
-      height: 40px;
-      stroke: #000000;
-    }
-
-    /* Small contact/footer icons */
-    .icon-sm {
-      width: 20px;
-      height: 20px;
-      stroke: #000000;
-      flex-shrink: 0;
-      vertical-align: middle;
-    }
-
-    /* Icons inside dark containers use white stroke */
-    .contact-info-icon .icon-sm,
-    .footer-contact-col .icon-sm {
-      stroke: #FFFFFF;
-    }
-
-    .why-body h3 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--secondary);
-      margin-bottom: 8px;
-    }
-
-    .why-body p {
-      color: var(--text-light);
-      font-size: 0.93rem;
-      line-height: 1.7;
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr; gap: 32px; }
+      .stat-item:not(:last-child)::after { display: none; }
+      .stat-number { font-size: 2.4rem; }
     }
 
     /* ============================================================
-       ZONE D'INTERVENTION
+       ZONE
     ============================================================ */
-    .zone-description {
-      text-align: center;
-      max-width: 640px;
-      margin: 0 auto 36px;
-      color: var(--text-light);
-      font-size: 1rem;
-      line-height: 1.75;
-    }
-
-    .zone-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-      margin-bottom: 48px;
-    }
-
-    .zone-tag {
-      background: #000000;
-      color: #FFFFFF;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 0.88rem;
-      padding: 8px 18px;
-      border-radius: 100px;
-    }
-
-    .map-wrapper {
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      box-shadow: var(--shadow-md);
-      max-width: 860px;
-      margin-inline: auto;
-    }
-
-    .map-wrapper iframe {
-      display: block;
-      width: 100%;
-      height: 380px;
-      border: none;
-    }
+    .zone-description { text-align: center; max-width: 640px; margin: 0 auto 36px; color: var(--text-light); font-size: 1rem; line-height: 1.75; }
+    .zone-tags { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 48px; }
+    .zone-tag { background: var(--black); color: var(--white); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; padding: 8px 18px; border-radius: 100px; }
+    .map-wrapper { border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-md); max-width: 860px; margin-inline: auto; }
+    .map-wrapper iframe { display: block; width: 100%; height: 380px; border: none; }
 
     /* ============================================================
        CONTACT
     ============================================================ */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-bottom: 56px;
-    }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 48px; }
 
     .contact-form-card {
-      background: var(--bg);
-      border: 1px solid rgba(0,0,0,0.07);
-      border-radius: var(--radius-md);
-      padding: 40px 36px;
-      box-shadow: var(--shadow);
+      background: var(--bg); border: 1px solid rgba(0,0,0,0.08);
+      border-radius: var(--radius-md); padding: 40px 36px; box-shadow: var(--shadow);
     }
-
     .contact-form-card h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--secondary);
-      margin-bottom: 28px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--bg-alt);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-size: 1.15rem; font-weight: 700; color: var(--black);
+      margin-bottom: 28px; padding-bottom: 16px;
+      border-bottom: 1px solid var(--bg-alt);
+      display: flex; align-items: center; gap: 10px;
     }
-
     .contact-form-card h3::before {
-      content: '';
-      display: inline-block;
-      width: 4px;
-      height: 22px;
-      background: var(--primary);
-      border-radius: 2px;
+      content: ''; display: inline-block;
+      width: 4px; height: 22px; background: var(--black); border-radius: 2px;
     }
 
-    .form-group {
-      margin-bottom: 18px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 7px;
-    }
-
-    .form-group label .optional {
-      font-weight: 400;
-      color: var(--text-light);
-      font-size: 0.8rem;
-    }
-
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 7px; }
+    .form-group label .optional { font-weight: 400; color: var(--text-light); font-size: 0.8rem; }
     .form-group input,
     .form-group select,
     .form-group textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: var(--radius-sm);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      color: var(--text);
-      background: var(--bg);
-      transition: border-color var(--transition), box-shadow var(--transition);
-      outline: none;
-      appearance: none;
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid #e0e0e0; border-radius: var(--radius-sm);
+      font-family: 'Inter', sans-serif; font-size: 0.92rem; color: var(--text);
+      background: var(--bg); outline: none; appearance: none;
+      transition: border-color var(--t), box-shadow var(--t);
     }
-
     .form-group input:focus,
     .form-group select:focus,
     .form-group textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+      border-color: var(--black);
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
     }
-
-    .form-group textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
+    .form-group textarea { min-height: 110px; resize: vertical; }
     .form-group select {
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 14px center;
-      padding-right: 36px;
-      cursor: pointer;
+      background-repeat: no-repeat; background-position: right 14px center;
+      padding-right: 36px; cursor: pointer;
     }
+    .radio-group { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 4px; }
+    .radio-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.92rem; }
+    .radio-label input[type="radio"] { width: 18px; height: 18px; accent-color: var(--black); cursor: pointer; flex-shrink: 0; }
 
-    .form-group select option {
-      font-family: 'Inter', sans-serif;
-    }
-
-    /* Radio group */
-    .radio-group {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-top: 4px;
-    }
-
-    .radio-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 0.92rem;
-      color: var(--text);
-    }
-
-    .radio-label input[type="radio"] {
-      width: 18px;
-      height: 18px;
-      accent-color: var(--primary);
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    /* Field error */
-    .field-error {
-      display: none;
-      color: #e53935;
-      font-size: 0.8rem;
-      margin-top: 5px;
-      font-weight: 500;
-    }
-
-    .field-error.show {
-      display: block;
-    }
-
+    .field-error { display: none; color: #e53935; font-size: 0.8rem; margin-top: 5px; font-weight: 500; }
+    .field-error.show { display: block; }
     .form-group input.invalid,
     .form-group select.invalid,
-    .form-group textarea.invalid {
-      border-color: #e53935;
-    }
+    .form-group textarea.invalid { border-color: #e53935; }
 
-    /* Success message */
     .form-success {
-      display: none;
-      background: #e8f5e9;
-      border: 1px solid #a5d6a7;
-      border-radius: var(--radius-sm);
-      padding: 16px 20px;
-      color: #2e7d32;
-      font-size: 0.92rem;
-      font-weight: 500;
-      margin-top: 12px;
-      text-align: center;
+      display: none; background: #e8f5e9; border: 1px solid #a5d6a7;
+      border-radius: var(--radius-sm); padding: 14px 18px;
+      color: #2e7d32; font-size: 0.9rem; font-weight: 500;
+      margin-top: 12px; text-align: center;
     }
-
     .form-success.show { display: block; }
 
-    /* Contact info block */
+    /* Contact info bar */
     .contact-info-block {
-      background: var(--secondary);
-      border-radius: var(--radius-md);
+      background: var(--dark); border-radius: var(--radius-md);
       padding: 36px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 48px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
     }
-
-    .contact-info-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
+    .contact-info-item { display: flex; align-items: center; gap: 14px; }
     .contact-info-icon {
-      font-size: 1.5rem;
-      width: 48px;
-      height: 48px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      width: 48px; height: 48px; background: rgba(255,255,255,0.08);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
+    .contact-info-text strong { display: block; color: var(--white); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; }
+    .contact-info-text span  { color: rgba(255,255,255,0.4); font-size: 0.82rem; }
+    .contact-info-divider    { width: 1px; height: 48px; background: rgba(255,255,255,0.08); }
 
-    .contact-info-text strong {
-      display: block;
-      color: var(--white);
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-    }
-
-    .contact-info-text span {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.82rem;
-    }
-
-    .contact-info-divider {
-      width: 1px;
-      height: 48px;
-      background: rgba(255,255,255,0.1);
-    }
+    /* Icons */
+    .icon-sm { width: 20px; height: 20px; stroke: var(--black); flex-shrink: 0; vertical-align: middle; }
+    .contact-info-icon .icon-sm,
+    .footer-contact-col    .icon-sm { stroke: var(--white); }
 
     @media (max-width: 860px) {
       .contact-grid { grid-template-columns: 1fr; }
       .contact-info-divider { display: none; }
     }
+    @media (max-width: 600px) {
+      .contact-form-card { padding: 28px 22px; }
+      .contact-info-block { padding: 24px 18px; flex-direction: column; gap: 22px; text-align: center; }
+      .contact-info-item { flex-direction: column; text-align: center; }
+    }
 
     /* ============================================================
        FOOTER
     ============================================================ */
-    .footer {
-      background: var(--secondary);
-      color: var(--white);
-      padding: 56px 0 0;
-    }
-
+    .footer { background: var(--dark); color: var(--white); padding: 56px 0 0; }
     .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 40px;
-      padding-bottom: 48px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 40px;
+      padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.07);
     }
-
-    .footer-brand p {
-      color: rgba(255,255,255,0.55);
-      font-size: 0.9rem;
-      margin-top: 12px;
-      max-width: 300px;
-      line-height: 1.7;
-    }
-
-    .footer-logo {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 800;
-      font-size: 1.4rem;
-      color: #FFFFFF;
-    }
+    .footer-logo { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--white); margin-bottom: 12px; }
+    .footer-brand p { color: rgba(255,255,255,0.5); font-size: 0.9rem; line-height: 1.7; max-width: 300px; }
 
     .footer-contact-col h4,
     .footer-tagline-col h4 {
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: rgba(255,255,255,0.4);
-      margin-bottom: 16px;
+      font-family: 'Poppins', sans-serif; font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      color: rgba(255,255,255,0.3); margin-bottom: 16px;
     }
-
     .footer-contact-col a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: rgba(255,255,255,0.75);
-      font-size: 0.93rem;
-      margin-bottom: 10px;
-      transition: color var(--transition);
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,0.65); font-size: 0.9rem; margin-bottom: 10px;
+      transition: color var(--t);
     }
+    .footer-contact-col a:hover { color: var(--white); }
+    .footer-tagline-col p { color: rgba(255,255,255,0.65); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 1rem; line-height: 1.5; }
+    .footer-bottom { padding: 20px 0; text-align: center; color: rgba(255,255,255,0.22); font-size: 0.82rem; }
 
-    .footer-contact-col a:hover { color: #FFFFFF; }
-
-    .footer-tagline-col p {
-      color: rgba(255,255,255,0.75);
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 1.05rem;
-      line-height: 1.5;
-    }
-
-    .footer-bottom {
-      padding: 20px 0;
-      text-align: center;
-      color: rgba(255,255,255,0.3);
-      font-size: 0.82rem;
-    }
-
-    @media (max-width: 768px) {
-      .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 28px;
-      }
-    }
+    @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr; gap: 28px; } }
 
     /* ============================================================
-       FLOATING WHATSAPP BUTTON
+       WHATSAPP
     ============================================================ */
     .whatsapp-float {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 900;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #25D366;
-      color: var(--white);
-      border-radius: 100px;
-      padding: 14px 22px 14px 18px;
-      box-shadow: 0 4px 24px rgba(37,211,102,0.35);
-      text-decoration: none;
-      font-family: 'Poppins', sans-serif;
-      font-weight: 600;
-      font-size: 0.88rem;
-      transition: transform var(--transition), box-shadow var(--transition);
+      position: fixed; bottom: 28px; right: 28px; z-index: 900;
+      display: flex; align-items: center; gap: 12px;
+      background: #25D366; color: var(--white);
+      border-radius: 100px; padding: 14px 22px 14px 18px;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.35); text-decoration: none;
+      font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.88rem;
+      transition: transform var(--t), box-shadow var(--t);
     }
-
-    .whatsapp-float:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 32px rgba(37,211,102,0.45);
-    }
-
-    .whatsapp-float svg {
-      width: 24px;
-      height: 24px;
-      fill: var(--white);
-      flex-shrink: 0;
-    }
-
-    /* Pulse ring */
+    .whatsapp-float:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 32px rgba(37,211,102,0.45); }
+    .whatsapp-float svg { width: 24px; height: 24px; fill: var(--white); flex-shrink: 0; }
     .whatsapp-float::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 100px;
-      background: #25D366;
-      animation: wa-pulse 2.4s ease-out infinite;
-      z-index: -1;
+      content: ''; position: absolute; inset: 0; border-radius: 100px;
+      background: #25D366; animation: wa-pulse 2.4s ease-out infinite; z-index: -1;
     }
-
     @keyframes wa-pulse {
-      0%   { transform: scale(1);   opacity: 0.6; }
+      0%   { transform: scale(1);    opacity: 0.6; }
       70%  { transform: scale(1.18); opacity: 0; }
       100% { transform: scale(1.18); opacity: 0; }
     }
-
-    .whatsapp-label {
-      white-space: nowrap;
-    }
-
+    .whatsapp-label { white-space: nowrap; }
     @media (max-width: 560px) {
-      .whatsapp-float {
-        padding: 14px;
-        border-radius: 50%;
-      }
+      .whatsapp-float { padding: 14px; border-radius: 50%; }
       .whatsapp-label { display: none; }
     }
 
     /* ============================================================
-       MISC RESPONSIVE HELPERS
+       SEQUENCE INTRO
+    ============================================================ */
+    #seq-wrapper  { position: relative; height: 300vh; z-index: 2000; }
+    #seq-sticky   { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; }
+    #seq-canvas   { display: block; width: 100%; height: 100%; }
+
+    #seq-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 10; pointer-events: none;
+      opacity: 0; transition: opacity 0.9s ease;
+    }
+    #seq-overlay h2 {
+      font-family: 'Poppins', sans-serif; font-size: clamp(2.2rem, 5.5vw, 4rem);
+      font-weight: 800; color: var(--white); margin: 0 0 14px;
+      text-shadow: 0 2px 32px rgba(0,0,0,0.8); text-align: center;
+    }
+    #seq-overlay p {
+      font-family: 'Inter', sans-serif; font-size: clamp(1rem, 2vw, 1.2rem);
+      color: rgba(255,255,255,0.85); margin: 0;
+      text-shadow: 0 1px 16px rgba(0,0,0,0.7); text-align: center;
+    }
+
+    /* Loading screen */
+    #seq-loader {
+      position: fixed; inset: 0; background: var(--dark); z-index: 3000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+      transition: opacity 0.6s ease;
+    }
+    #seq-loader.hidden { opacity: 0; pointer-events: none; }
+    #seq-loader-text {
+      font-family: 'Poppins', sans-serif; font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4);
+    }
+    .seq-spinner {
+      width: 44px; height: 44px;
+      border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--white);
+      border-radius: 50%; animation: seq-spin 0.9s linear infinite;
+    }
+    @keyframes seq-spin { to { transform: rotate(360deg); } }
+
+    /* Scroll hint */
+    #seq-hint {
+      position: fixed; bottom: 36px; left: 50%; transform: translateX(-50%);
+      z-index: 2100; display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0; transition: opacity 0.6s ease; pointer-events: none;
+    }
+    #seq-hint span {
+      font-family: 'Poppins', sans-serif; font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5);
+    }
+    #seq-hint svg { animation: hint-bounce 1.6s ease-in-out infinite; }
+    @keyframes hint-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(7px); } }
+
+    /* ============================================================
+       RESPONSIVE
     ============================================================ */
     @media (max-width: 600px) {
       .section { padding: 72px 0; }
       .hero-ctas { flex-direction: column; align-items: flex-start; }
       .hero-ctas .btn { width: 100%; justify-content: center; }
-      .contact-form-card { padding: 28px 22px; }
-      .contact-info-block { padding: 28px 20px; flex-direction: column; gap: 24px; text-align: center; }
-      .contact-info-item { flex-direction: column; text-align: center; }
-    }
-
-    /* ============================================================
-       STATS BAR
-    ============================================================ */
-    .stats-bar {
-      background: var(--secondary);
-      padding: 56px 0;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0;
-    }
-
-    .stat-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 12px 24px;
-      position: relative;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .stat-item.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .stat-item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 52px;
-      width: 1px;
-      background: rgba(255,255,255,0.1);
-    }
-
-    .stat-number {
-      font-family: 'Poppins', sans-serif;
-      font-size: 3rem;
-      font-weight: 800;
-      color: #FFFFFF;
-      line-height: 1;
-      margin-bottom: 10px;
-      letter-spacing: -1px;
-    }
-
-    .stat-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.6);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-    }
-
-    @media (max-width: 600px) {
-      .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-      .stat-item:not(:last-child)::after { display: none; }
-      .stat-number { font-size: 2.5rem; }
-    }
-    /* ============================================================
-       SEQUENCE INTRO ANIMATION
-    ============================================================ */
-    #seq-wrapper {
-      position: relative;
-      height: 300vh;
-      z-index: 2000;
-    }
-
-    #seq-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      width: 100%;
-      overflow: hidden;
-    }
-
-    #seq-canvas {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Text overlay */
-    /* Full-screen dark gradient so left side is always readable */
-    #seq-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
-      z-index: 10;
-      opacity: 0;
-      transition: opacity 0.9s ease;
-      padding: 0 clamp(24px, 6vw, 120px);
-      /* strong left-to-right dark veil */
-      background: linear-gradient(
-        105deg,
-        rgba(0,0,0,0.82) 0%,
-        rgba(0,0,0,0.65) 45%,
-        rgba(0,0,0,0.15) 75%,
-        rgba(0,0,0,0)    100%
-      );
-    }
-
-    #seq-overlay.active {
-      pointer-events: auto;
-    }
-
-    /* Inner content card — subtle frosted glass panel */
-    #seq-overlay-inner {
-      max-width: 580px;
-      background: rgba(0,0,0,0.35);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 16px;
-      padding: clamp(28px, 4vw, 48px) clamp(24px, 4vw, 44px);
-    }
-
-    #seq-overlay-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.3);
-      color: #FFFFFF;
-      padding: 6px 16px;
-      border-radius: 100px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    #seq-overlay h1 {
-      font-family: 'Poppins', sans-serif;
-      font-size: clamp(2.4rem, 5.5vw, 4rem);
-      font-weight: 800;
-      color: #FFFFFF;
-      line-height: 1.1;
-      margin: 0 0 12px;
-      text-shadow: 0 2px 16px rgba(0,0,0,0.9);
-    }
-
-    #seq-overlay h1 span { color: #FFFFFF; }
-
-    #seq-overlay h2 {
-      font-family: 'Poppins', sans-serif;
-      font-size: clamp(1rem, 2.2vw, 1.3rem);
-      font-weight: 500;
-      color: rgba(255,255,255,0.9);
-      margin: 0 0 14px;
-      text-shadow: 0 1px 10px rgba(0,0,0,0.8);
-    }
-
-    #seq-overlay-body {
-      font-family: 'Inter', sans-serif;
-      font-size: clamp(0.88rem, 1.3vw, 1rem);
-      color: rgba(255,255,255,0.75);
-      line-height: 1.75;
-      margin-bottom: 32px;
-      text-shadow: 0 1px 6px rgba(0,0,0,0.7);
-    }
-
-    #seq-overlay-ctas {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-bottom: 22px;
-    }
-
-    #seq-overlay-tagline {
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.6);
-      letter-spacing: 0.3px;
-    }
-
-    @media (max-width: 600px) {
-      #seq-overlay-inner { padding: 22px 18px; }
-      #seq-overlay-ctas { flex-direction: column; }
-      #seq-overlay-ctas .btn { justify-content: center; }
-    }
-
-    /* Loading screen */
-    #seq-loader {
-      position: fixed;
-      inset: 0;
-      background: #1A1A1A;
-      z-index: 3000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      transition: opacity 0.6s ease;
-    }
-
-    #seq-loader.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #seq-loader span {
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
-    }
-
-    .seq-spinner {
-      width: 44px;
-      height: 44px;
-      border: 3px solid rgba(255,255,255,0.15);
-      border-top-color: #FFFFFF;
-      border-radius: 50%;
-      animation: seq-spin 0.9s linear infinite;
-    }
-
-    @keyframes seq-spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Scroll hint */
-    #seq-hint {
-      position: fixed;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2100;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      pointer-events: none;
-    }
-
-    #seq-hint span {
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-    }
-
-    #seq-hint svg {
-      animation: seq-bounce 1.6s ease-in-out infinite;
-    }
-
-    @keyframes seq-bounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(7px); }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Loading screen -->
+  <!-- ============================================================
+       LOADING SCREEN
+  ============================================================ -->
   <div id="seq-loader">
     <div class="seq-spinner"></div>
     <span id="seq-loader-text">Chargement…</span>
   </div>
 
   <!-- ============================================================
-       SEQUENCE INTRO ANIMATION
+       SEQUENCE INTRO (300vh scroll driver)
   ============================================================ -->
   <div id="seq-wrapper">
     <div id="seq-sticky">
       <canvas id="seq-canvas"></canvas>
-
-      <!-- Text overlay — fades in at 65% scroll progress -->
+      <!-- Text overlay: fades in at 70% scroll progress -->
       <div id="seq-overlay">
-        <div id="seq-overlay-inner">
-          <div id="seq-overlay-badge">🧹 Grenoble &amp; Isère</div>
-          <h1>SK38<span> Nettoyage</span></h1>
-          <h2>Votre partenaire propreté à Grenoble</h2>
-          <p id="seq-overlay-body">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
-          <div id="seq-overlay-ctas">
-            <a href="#contact" class="btn btn-primary">Demander un devis</a>
-            <a href="#contact" class="btn btn-outline">Être rappelé</a>
-          </div>
-          <p id="seq-overlay-tagline">La propreté qui fait la différence !</p>
-        </div>
+        <h2>SK38 Nettoyage</h2>
+        <p>Votre partenaire propreté à Grenoble</p>
       </div>
     </div>
   </div>
@@ -1327,7 +555,7 @@
   <div id="seq-hint">
     <span>Défiler</span>
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-         stroke="rgba(255,255,255,0.55)" stroke-width="2.5"
+         stroke="rgba(255,255,255,0.5)" stroke-width="2.5"
          stroke-linecap="round" stroke-linejoin="round">
       <polyline points="6 9 12 15 18 9"></polyline>
     </svg>
@@ -1338,12 +566,12 @@
   ============================================================ -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="#services" class="nav-logo">
-        <img src="images/SK38_FINAL_LOGO.png" alt="SK38 Nettoyage" height="50" style="width:auto;height:50px;display:block;filter:invert(1);" />
+      <a href="#hero" class="nav-logo">
+        <img src="images/SK38 FINAL LOGO.png" alt="SK38 Nettoyage" height="40" />
       </a>
 
       <ul class="nav-links" id="navLinks">
-        <li><a href="#services"  class="nav-link">Services</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
         <li><a href="#pourquoi" class="nav-link">Pourquoi nous</a></li>
         <li><a href="#zone"     class="nav-link">Zone</a></li>
         <li><a href="#contact"  class="nav-link">Contact</a></li>
@@ -1354,12 +582,32 @@
       </div>
 
       <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <section class="hero" id="hero">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge hero-animate hero-animate--1">
+          🧹 Grenoble &amp; Isère
+        </div>
+        <h1 class="hero-animate hero-animate--2">SK38 Nettoyage</h1>
+        <h2 class="hero-animate hero-animate--3">Votre partenaire propreté à Grenoble</h2>
+        <p class="hero-body hero-animate hero-animate--4">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
+        <div class="hero-ctas hero-animate hero-animate--5">
+          <a href="#contact" class="btn btn-primary">Demander un devis</a>
+          <a href="#contact" class="btn btn-outline">Être rappelé</a>
+        </div>
+        <p class="hero-tagline hero-animate hero-animate--6">La propreté qui fait la différence !</p>
+      </div>
+    </div>
+  </section>
 
   <!-- ============================================================
        SERVICES
@@ -1371,21 +619,40 @@
       </div>
 
       <div class="services-grid" id="services-grid">
+
         <div class="service-card">
-          <i data-lucide="school" class="service-icon"></i>
-          <h3>Écoles &amp; Établissements scolaires</h3>
-          <p>Des environnements propres et sains pour accueillir élèves et enseignants dans les meilleures conditions.</p>
+          <div class="service-card-img">
+            <img src="images/Reff 1.jpg" alt="Nettoyage écoles" loading="lazy" />
+          </div>
+          <div class="service-card-body">
+            <i data-lucide="school" class="service-icon"></i>
+            <h3>Écoles &amp; Établissements scolaires</h3>
+            <p>Des environnements propres et sains pour accueillir élèves et enseignants dans les meilleures conditions.</p>
+          </div>
         </div>
+
         <div class="service-card">
-          <i data-lucide="building-2" class="service-icon"></i>
-          <h3>Bureaux &amp; Espaces de travail</h3>
-          <p>Un cadre de travail impeccable pour vos équipes, entretenu avec sérieux et discrétion.</p>
+          <div class="service-card-img">
+            <img src="images/Reff 2.png" alt="Nettoyage bureaux" loading="lazy" />
+          </div>
+          <div class="service-card-body">
+            <i data-lucide="building-2" class="service-icon"></i>
+            <h3>Bureaux &amp; Espaces de travail</h3>
+            <p>Un cadre de travail impeccable pour vos équipes, entretenu avec sérieux et discrétion.</p>
+          </div>
         </div>
+
         <div class="service-card">
-          <i data-lucide="shopping-bag" class="service-icon"></i>
-          <h3>Centres commerciaux &amp; Magasins</h3>
-          <p>Une image soignée pour vos espaces de vente, du sol au plafond, à chaque passage.</p>
+          <div class="service-card-img">
+            <img src="images/Reff 3.png" alt="Nettoyage commerces" loading="lazy" />
+          </div>
+          <div class="service-card-body">
+            <i data-lucide="shopping-bag" class="service-icon"></i>
+            <h3>Centres commerciaux &amp; Magasins</h3>
+            <p>Une image soignée pour vos espaces de vente, du sol au plafond, à chaque passage.</p>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -1399,28 +666,32 @@
         <h2>Pourquoi choisir SK38 Nettoyage ?</h2>
       </div>
 
-      <div class="why-list stagger-children">
-        <div class="why-item">
+      <div class="why-list">
+
+        <div class="why-item fade-up">
           <div class="why-icon"><i data-lucide="shield-check"></i></div>
           <div class="why-body">
             <h3>Personnel sérieux et professionnel</h3>
             <p>Une équipe formée, fiable et attentive aux détails — parce que votre confiance mérite du sérieux.</p>
           </div>
         </div>
-        <div class="why-item">
+
+        <div class="why-item fade-up">
           <div class="why-icon"><i data-lucide="zap"></i></div>
           <div class="why-body">
             <h3>Intervention rapide à Grenoble et alentours</h3>
             <p>Nous intervenons vite, sans sacrifier la qualité. Votre espace propre, quand vous en avez besoin.</p>
           </div>
         </div>
-        <div class="why-item">
+
+        <div class="why-item fade-up">
           <div class="why-icon"><i data-lucide="refresh-cw"></i></div>
           <div class="why-body">
             <h3>Nettoyage régulier ou ponctuel</h3>
             <p>Un contrat régulier ou une intervention unique — nous nous adaptons à vos besoins et votre planning.</p>
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -1440,7 +711,7 @@
           <span class="stat-label">Département de l'Isère</span>
         </div>
         <div class="stat-item">
-          <span class="stat-number" data-text="7j/7">7j/7</span>
+          <span class="stat-number">7j/7</span>
           <span class="stat-label">Disponibilité</span>
         </div>
       </div>
@@ -1475,9 +746,7 @@
       <div class="map-wrapper fade-up">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d89285.55540060822!2d5.668004!3d45.188529!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x478af4a24adcea1f%3A0x6be8aef84e6aa97d!2sGrenoble%2C%20France!5e0!3m2!1sfr!2sfr!4v1696000000000!5m2!1sfr!2sfr"
-          allowfullscreen=""
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
           title="Carte de Grenoble et agglomération">
         </iframe>
       </div>
@@ -1495,18 +764,11 @@
       </div>
 
       <div class="contact-grid">
-        <!-- FORM 1: Demande de devis -->
+
+        <!-- Form 1: Devis -->
         <div class="contact-form-card fade-up">
           <h3>Demander un devis</h3>
-
-          <form
-            name="devis"
-            method="POST"
-            netlify
-            data-netlify="true"
-            id="form-devis"
-            novalidate
-          >
+          <form name="devis" method="POST" netlify data-netlify="true" id="form-devis" novalidate>
             <input type="hidden" name="form-name" value="devis" />
 
             <div class="form-group">
@@ -1559,18 +821,10 @@
           </form>
         </div>
 
-        <!-- FORM 2: Être rappelé -->
+        <!-- Form 2: Rappel -->
         <div class="contact-form-card fade-up">
           <h3>Être rappelé</h3>
-
-          <form
-            name="rappel"
-            method="POST"
-            netlify
-            data-netlify="true"
-            id="form-rappel"
-            novalidate
-          >
+          <form name="rappel" method="POST" netlify data-netlify="true" id="form-rappel" novalidate>
             <input type="hidden" name="form-name" value="rappel" />
 
             <div class="form-group">
@@ -1588,22 +842,13 @@
             <div class="form-group">
               <label>Disponibilité</label>
               <div class="radio-group">
-                <label class="radio-label">
-                  <input type="radio" name="disponibilite" value="Matin" />
-                  Matin
-                </label>
-                <label class="radio-label">
-                  <input type="radio" name="disponibilite" value="Après-midi" />
-                  Après-midi
-                </label>
-                <label class="radio-label">
-                  <input type="radio" name="disponibilite" value="Indifférent" checked />
-                  Indifférent
-                </label>
+                <label class="radio-label"><input type="radio" name="disponibilite" value="Matin" /> Matin</label>
+                <label class="radio-label"><input type="radio" name="disponibilite" value="Après-midi" /> Après-midi</label>
+                <label class="radio-label"><input type="radio" name="disponibilite" value="Indifférent" checked /> Indifférent</label>
               </div>
             </div>
 
-            <div style="margin-top: 24px;">
+            <div style="margin-top:24px;">
               <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">
                 Je souhaite être rappelé
               </button>
@@ -1613,20 +858,21 @@
             </div>
           </form>
 
-          <!-- Direct contact info inside the card -->
-          <div style="margin-top: 36px; padding-top: 28px; border-top: 1px solid #f0f0f0;">
-            <p style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:16px;">Contact direct</p>
-            <p style="display:flex;align-items:center;gap:10px;font-size:0.95rem;font-weight:600;margin-bottom:10px;">
+          <!-- Direct contact -->
+          <div style="margin-top:32px;padding-top:24px;border-top:1px solid #f0f0f0;">
+            <p style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:14px;">Contact direct</p>
+            <p style="display:flex;align-items:center;gap:10px;font-size:0.93rem;font-weight:600;margin-bottom:10px;">
               <i data-lucide="phone" class="icon-sm"></i>
-              <a href="tel:+33651799245" style="color:var(--secondary);transition:color 0.2s;" onmouseover="this.style.color='#000000'" onmouseout="this.style.color='var(--secondary)'">06 51 79 92 45</a>
+              <a href="tel:+33651799245" style="color:var(--secondary);">06 51 79 92 45</a>
             </p>
-            <p style="display:flex;align-items:center;gap:10px;font-size:0.95rem;font-weight:600;margin-bottom:12px;">
+            <p style="display:flex;align-items:center;gap:10px;font-size:0.93rem;font-weight:600;margin-bottom:14px;">
               <i data-lucide="mail" class="icon-sm"></i>
-              <a href="mailto:skgrenoble17@gmail.com" style="color:var(--secondary);transition:color 0.2s;" onmouseover="this.style.color='#000000'" onmouseout="this.style.color='var(--secondary)'">skgrenoble17@gmail.com</a>
+              <a href="mailto:skgrenoble17@gmail.com" style="color:var(--secondary);">skgrenoble17@gmail.com</a>
             </p>
-            <p style="color:var(--text-light);font-size:0.85rem;">Disponible du lundi au samedi, de 8h à 19h</p>
+            <p style="color:var(--text-light);font-size:0.84rem;">Disponible du lundi au samedi, de 8h à 19h</p>
           </div>
         </div>
+
       </div>
 
       <!-- Contact info bar -->
@@ -1634,7 +880,7 @@
         <div class="contact-info-item">
           <div class="contact-info-icon"><i data-lucide="phone" class="icon-sm"></i></div>
           <div class="contact-info-text">
-            <strong><a href="tel:+33651799245" style="color:inherit;text-decoration:none;">06 51 79 92 45</a></strong>
+            <strong><a href="tel:+33651799245" style="color:inherit;">06 51 79 92 45</a></strong>
             <span>Lun–Sam, 8h–19h</span>
           </div>
         </div>
@@ -1642,7 +888,7 @@
         <div class="contact-info-item">
           <div class="contact-info-icon"><i data-lucide="mail" class="icon-sm"></i></div>
           <div class="contact-info-text">
-            <strong><a href="mailto:skgrenoble17@gmail.com" style="color:inherit;text-decoration:none;">skgrenoble17@gmail.com</a></strong>
+            <strong><a href="mailto:skgrenoble17@gmail.com" style="color:inherit;">skgrenoble17@gmail.com</a></strong>
             <span>Réponse sous 24h</span>
           </div>
         </div>
@@ -1655,6 +901,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -1664,20 +911,24 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
+
         <div class="footer-brand">
           <div class="footer-logo">SK38 Nettoyage</div>
           <p>Votre partenaire propreté à Grenoble et en Isère. Des espaces impeccables pour mieux travailler, apprendre et accueillir.</p>
         </div>
+
         <div class="footer-contact-col">
           <h4>Contact</h4>
           <a href="tel:+33651799245"><i data-lucide="phone" class="icon-sm"></i> 06 51 79 92 45</a>
           <a href="mailto:skgrenoble17@gmail.com"><i data-lucide="mail" class="icon-sm"></i> skgrenoble17@gmail.com</a>
-          <p style="color:rgba(255,255,255,0.4);font-size:0.83rem;margin-top:8px;">Lun–Sam · 8h–19h</p>
+          <p style="color:rgba(255,255,255,0.25);font-size:0.82rem;margin-top:8px;">Lun–Sam · 8h–19h</p>
         </div>
+
         <div class="footer-tagline-col">
           <h4>Notre promesse</h4>
           <p>La propreté qui fait la différence !</p>
         </div>
+
       </div>
       <div class="footer-bottom">
         &copy; 2026 SK38 Nettoyage — Tous droits réservés
@@ -1686,15 +937,10 @@
   </footer>
 
   <!-- ============================================================
-       FLOATING WHATSAPP BUTTON
+       FLOATING WHATSAPP
   ============================================================ -->
-  <a
-    href="https://wa.me/33651799245"
-    class="whatsapp-float"
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label="Écrire sur WhatsApp"
-  >
+  <a href="https://wa.me/33651799245" class="whatsapp-float"
+     target="_blank" rel="noopener noreferrer" aria-label="Écrire sur WhatsApp">
     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M16.004 0C7.164 0 .004 7.16.004 16c0 2.82.736 5.463 2.02 7.754L0 32l8.48-2.004A15.943 15.943 0 0 0 16.004 32C24.844 32 32 24.84 32 16S24.844 0 16.004 0zm0 29.28a13.24 13.24 0 0 1-6.74-1.842l-.48-.284-4.99 1.18 1.244-4.84-.32-.504A13.21 13.21 0 0 1 2.724 16c0-7.32 5.96-13.28 13.28-13.28 7.32 0 13.28 5.96 13.276 13.28 0 7.32-5.956 13.28-13.276 13.28zm7.28-9.928c-.4-.2-2.36-1.164-2.724-1.296-.364-.132-.628-.2-.892.2-.264.4-1.02 1.296-1.252 1.564-.232.268-.46.3-.86.1-.4-.2-1.688-.624-3.216-1.984-1.188-1.06-1.988-2.368-2.22-2.768-.232-.4-.024-.616.176-.816.18-.18.4-.464.6-.696.2-.232.268-.4.4-.664.132-.268.068-.5-.032-.7-.1-.2-.892-2.148-1.22-2.94-.32-.776-.648-.668-.892-.68l-.76-.012c-.264 0-.692.1-.1055.5-.364.4-1.388 1.356-1.388 3.308 0 1.952 1.42 3.836 1.62 4.1.2.264 2.796 4.268 6.776 5.984.948.408 1.688.652 2.264.836.952.3 1.82.26 2.504.156.764-.116 2.36-.964 2.692-1.896.332-.932.332-1.732.232-1.896-.1-.168-.364-.268-.764-.468z"/>
     </svg>
@@ -1705,19 +951,19 @@
        JAVASCRIPT
   ============================================================ -->
   <script>
-    /* ---- Hamburger menu ---- */
-    const hamburger = document.getElementById('hamburger');
-    const navLinks  = document.getElementById('navLinks');
 
-    hamburger.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
+    /* ---- Hamburger menu ---- */
+    var hamburger = document.getElementById('hamburger');
+    var navLinks  = document.getElementById('navLinks');
+
+    hamburger.addEventListener('click', function () {
+      var isOpen = navLinks.classList.toggle('open');
       hamburger.classList.toggle('open', isOpen);
-      hamburger.setAttribute('aria-expanded', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
     });
 
-    // Close nav on link click (mobile)
-    navLinks.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
+    navLinks.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
         navLinks.classList.remove('open');
         hamburger.classList.remove('open');
         hamburger.setAttribute('aria-expanded', 'false');
@@ -1725,48 +971,87 @@
     });
 
     /* ---- Active nav link on scroll ---- */
-    const sections = document.querySelectorAll('section[id], .hero');
-    const navAnchors = document.querySelectorAll('.nav-link');
-    const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'));
+    var sections   = document.querySelectorAll('section[id]');
+    var navAnchors = document.querySelectorAll('.nav-link');
 
     function setActiveNav() {
-      let current = '';
-      sections.forEach(sec => {
-        const top = sec.getBoundingClientRect().top;
-        if (top <= navH + 60) current = sec.id;
+      var current = '';
+      sections.forEach(function (sec) {
+        if (sec.getBoundingClientRect().top <= 90) current = sec.id;
       });
-      navAnchors.forEach(a => {
+      navAnchors.forEach(function (a) {
         a.classList.toggle('active', a.getAttribute('href') === '#' + current);
       });
     }
-
     window.addEventListener('scroll', setActiveNav, { passive: true });
     setActiveNav();
 
-    /* ---- Intersection Observer: fade-up sections ---- */
-    const observerOpts = { threshold: 0.1, rootMargin: '0px 0px -40px 0px' };
+    /* ---- Intersection Observer: fade-up ---- */
+    var fadeObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('visible'); fadeObs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    const fadeObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          fadeObserver.unobserve(entry.target);
+    document.querySelectorAll('.fade-up').forEach(function (el) { fadeObs.observe(el); });
+
+    /* ---- Service cards stagger (Intersection Observer) ---- */
+    var servicesGrid = document.getElementById('services-grid');
+    var serviceCards = servicesGrid.querySelectorAll('.service-card');
+    var cardDelays   = [0, 150, 300];
+
+    var cardsObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          serviceCards.forEach(function (card, i) {
+            setTimeout(function () { card.classList.add('card-visible'); }, cardDelays[i]);
+          });
+          cardsObs.disconnect();
         }
       });
-    }, observerOpts);
+    }, { threshold: 0.15 });
 
-    document.querySelectorAll('.fade-up, .stagger-children').forEach(el => {
-      fadeObserver.observe(el);
-    });
+    cardsObs.observe(servicesGrid);
 
-    /* ---- Form validation & fake submit (Netlify handles real POST) ---- */
+    /* ---- Stats counter (Intersection Observer) ---- */
+    function animateCounter(el, target, duration, suffix) {
+      var start = performance.now();
+      function tick(now) {
+        var p     = Math.min((now - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased) + (suffix || '');
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    var statsBar    = document.getElementById('stats-bar');
+    var statItems   = statsBar.querySelectorAll('.stat-item');
+    var statsPlayed = false;
+
+    var statsObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && !statsPlayed) {
+          statsPlayed = true;
+          statItems.forEach(function (item, i) {
+            setTimeout(function () { item.classList.add('visible'); }, i * 120);
+          });
+          var el500 = statsBar.querySelector('[data-target="500"]');
+          var el38  = statsBar.querySelector('[data-target="38"]');
+          if (el500) animateCounter(el500, 500, 2000, '+');
+          if (el38)  animateCounter(el38,  38,  1500, '');
+          statsObs.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+
+    statsObs.observe(statsBar);
+
+    /* ---- Form validation ---- */
     function validateField(input) {
-      const id    = input.id;
-      const errEl = document.getElementById('err-' + id);
+      var errEl = document.getElementById('err-' + input.id);
       if (!errEl) return true;
-
-      let valid = true;
-
+      var valid;
       if (input.type === 'email') {
         valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value.trim());
       } else if (input.tagName === 'SELECT') {
@@ -1774,272 +1059,158 @@
       } else {
         valid = input.value.trim().length > 0;
       }
-
       input.classList.toggle('invalid', !valid);
       errEl.classList.toggle('show', !valid);
       return valid;
     }
 
-    function attachLiveValidation(form) {
-      form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
-        field.addEventListener('blur', () => validateField(field));
-        field.addEventListener('input', () => {
-          if (field.classList.contains('invalid')) validateField(field);
-        });
-      });
-    }
-
-    function handleFormSubmit(formId, successId) {
-      const form    = document.getElementById(formId);
-      const success = document.getElementById(successId);
+    function setupForm(formId, successId) {
+      var form    = document.getElementById(formId);
+      var success = document.getElementById(successId);
       if (!form) return;
 
-      attachLiveValidation(form);
+      form.querySelectorAll('input[required],select[required],textarea[required]').forEach(function (f) {
+        f.addEventListener('blur',  function () { validateField(f); });
+        f.addEventListener('input', function () { if (f.classList.contains('invalid')) validateField(f); });
+      });
 
-      form.addEventListener('submit', function(e) {
+      form.addEventListener('submit', function (e) {
         e.preventDefault();
-
-        let allValid = true;
-        form.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
-          if (!validateField(field)) allValid = false;
+        var allValid = true;
+        form.querySelectorAll('input[required],select[required],textarea[required]').forEach(function (f) {
+          if (!validateField(f)) allValid = false;
         });
-
         if (!allValid) return;
-
-        // Submit to Netlify via fetch
-        const data = new FormData(form);
 
         fetch('/', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(data).toString()
-        })
-        .then(() => {
+          body: new URLSearchParams(new FormData(form)).toString()
+        }).finally(function () {
           form.reset();
-          form.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
+          form.querySelectorAll('.invalid').forEach(function (el) { el.classList.remove('invalid'); });
           success.classList.add('show');
-          setTimeout(() => success.classList.remove('show'), 7000);
-        })
-        .catch(() => {
-          // Fallback: still show success (Netlify may handle via redirect)
-          form.reset();
-          success.classList.add('show');
-          setTimeout(() => success.classList.remove('show'), 7000);
+          setTimeout(function () { success.classList.remove('show'); }, 7000);
         });
       });
     }
 
-    handleFormSubmit('form-devis',  'success-devis');
-    handleFormSubmit('form-rappel', 'success-rappel');
-
-    /* ---- Stats bar counter animation ---- */
-    function animateCounter(el, target, duration, suffix) {
-      const start     = performance.now();
-      const startVal  = 0;
-
-      function tick(now) {
-        const elapsed  = now - start;
-        const progress = Math.min(elapsed / duration, 1);
-        // ease-out cubic
-        const eased    = 1 - Math.pow(1 - progress, 3);
-        const current  = Math.round(startVal + (target - startVal) * eased);
-        el.textContent = current + (suffix || '');
-        if (progress < 1) requestAnimationFrame(tick);
-      }
-
-      requestAnimationFrame(tick);
-    }
-
-    const statsBar   = document.getElementById('stats-bar');
-    const statItems  = statsBar.querySelectorAll('.stat-item');
-    let   statsPlayed = false;
-
-    const statsObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !statsPlayed) {
-          statsPlayed = true;
-
-          statItems.forEach((item, i) => {
-            // Stagger the fade-in slightly
-            setTimeout(() => item.classList.add('visible'), i * 120);
-          });
-
-          // Counter: 500+
-          const el500 = statsBar.querySelector('[data-target="500"]');
-          setTimeout(() => animateCounter(el500, 500, 2000, '+'), 0);
-
-          // Counter: 38
-          const el38  = statsBar.querySelector('[data-target="38"]');
-          setTimeout(() => animateCounter(el38, 38, 1500, ''), 0);
-
-          // "7j/7" — already shows the text, just let the fade-in handle it
-
-          statsObserver.disconnect();
-        }
-      });
-    }, { threshold: 0.3 });
-
-    statsObserver.observe(statsBar);
+    setupForm('form-devis',  'success-devis');
+    setupForm('form-rappel', 'success-rappel');
 
     /* ---- Render Lucide icons ---- */
     lucide.createIcons();
 
-    /* ---- Service cards stagger animation ---- */
-    const servicesGrid  = document.getElementById('services-grid');
-    const serviceCards  = servicesGrid.querySelectorAll('.service-card');
-    const cardDelays    = [0, 150, 300];
-
-    const cardsObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          serviceCards.forEach((card, i) => {
-            setTimeout(() => card.classList.add('card-visible'), cardDelays[i]);
-          });
-          cardsObserver.disconnect();
-        }
-      });
-    }, { threshold: 0.15 });
-
-    cardsObserver.observe(servicesGrid);
-
     /* ================================================================
-       SEQUENCE INTRO ANIMATION
+       SEQUENCE INTRO — scroll-driven 120-frame animation
     ================================================================ */
     (function () {
-      const TOTAL_FRAMES = 120;
+      var TOTAL    = 120;
+      var wrapper  = document.getElementById('seq-wrapper');
+      var sticky   = document.getElementById('seq-sticky');
+      var canvas   = document.getElementById('seq-canvas');
+      var overlay  = document.getElementById('seq-overlay');
+      var loader   = document.getElementById('seq-loader');
+      var loaderTxt= document.getElementById('seq-loader-text');
+      var hint     = document.getElementById('seq-hint');
+      var ctx      = canvas.getContext('2d');
 
-      const wrapper   = document.getElementById('seq-wrapper');
-      const sticky    = document.getElementById('seq-sticky');
-      const canvas    = document.getElementById('seq-canvas');
-      const overlay   = document.getElementById('seq-overlay');
-      const loader    = document.getElementById('seq-loader');
-      const loaderTxt = document.getElementById('seq-loader-text');
-      const hint      = document.getElementById('seq-hint');
-      const ctx       = canvas.getContext('2d');
-
-      // ── Build filenames ───────────────────────────────────────────
-      const images = [];
-      for (var i = 0; i < TOTAL_FRAMES; i++) {
-        var idx = String(i).padStart(3, '0');
+      /* Build image array */
+      var images = [];
+      for (var i = 0; i < TOTAL; i++) {
         var img = new Image();
-        img.src = 'sequence/frame_' + idx + '_delay-0.066s.png';
+        img.src = 'sequence/frame_' + String(i).padStart(3, '0') + '_delay-0.066s.png';
         images.push(img);
       }
 
-      // ── Preload tracking ──────────────────────────────────────────
-      var loaded = 0;
-      var ready  = false;
+      /* Preload all frames */
+      var loaded = 0, ready = false;
 
       images.forEach(function (img) {
         function done() {
           loaded++;
-          var pct = Math.round((loaded / TOTAL_FRAMES) * 100);
-          loaderTxt.textContent = 'Chargement\u2026 ' + pct + '%';
-          if (loaded === TOTAL_FRAMES) onAllLoaded();
+          loaderTxt.textContent = 'Chargement\u2026 ' + Math.round(loaded / TOTAL * 100) + '%';
+          if (loaded === TOTAL) onReady();
         }
         img.onload  = done;
-        img.onerror = done; // count errors so we never hang
+        img.onerror = done; /* count errors so we never hang */
       });
 
-      function onAllLoaded() {
+      function onReady() {
         ready = true;
         loader.classList.add('hidden');
         setTimeout(function () { loader.style.display = 'none'; }, 700);
         resizeCanvas();
-        paintFrame(0);
-        // Show scroll hint
+        paint(0);
         setTimeout(function () {
           if (window.scrollY < 20) hint.style.opacity = '1';
         }, 900);
       }
 
-      // ── Canvas cover-fit ──────────────────────────────────────────
+      /* Canvas sizing */
       function resizeCanvas() {
         canvas.width  = sticky.offsetWidth;
         canvas.height = sticky.offsetHeight;
-        if (ready) paintFrame(getFrameIndex());
+        if (ready) paint(getIndex());
       }
 
-      function paintFrame(index) {
+      /* Cover-fit paint */
+      function paint(index) {
         var img = images[index];
         if (!img || !img.naturalWidth) return;
-
-        var cw    = canvas.width;
-        var ch    = canvas.height;
-        var iw    = img.naturalWidth;
-        var ih    = img.naturalHeight;
-        var scale = Math.max(cw / iw, ch / ih);
-        var sw    = iw * scale;
-        var sh    = ih * scale;
-        var dx    = (cw - sw) / 2;
-        var dy    = (ch - sh) / 2;
-
+        var cw = canvas.width, ch = canvas.height;
+        var iw = img.naturalWidth, ih = img.naturalHeight;
+        var s  = Math.max(cw / iw, ch / ih);
         ctx.clearRect(0, 0, cw, ch);
-        ctx.drawImage(img, dx, dy, sw, sh);
+        ctx.drawImage(img, (cw - iw * s) / 2, (ch - ih * s) / 2, iw * s, ih * s);
       }
 
-      // ── Scroll math ───────────────────────────────────────────────
+      /* Scroll progress: 0 → 1 across (300vh − 100vh) = 200vh */
       function getProgress() {
         var scrollable = wrapper.offsetHeight - window.innerHeight;
-        var raw        = window.scrollY / scrollable;
-        return Math.min(Math.max(raw, 0), 1);
+        return Math.min(Math.max(window.scrollY / scrollable, 0), 1);
       }
 
-      function getFrameIndex() {
-        return Math.min(
-          Math.floor(getProgress() * (TOTAL_FRAMES - 1)),
-          TOTAL_FRAMES - 1
-        );
+      /* Frame index: progress mapped to 0–119 */
+      function getIndex() {
+        return Math.min(Math.floor(getProgress() * (TOTAL - 1)), TOTAL - 1);
       }
 
-      // ── Auto-scroll when sequence completes ───────────────────────
+      /* Auto-scroll to hero when sequence completes */
       var seqDone = false;
-
-      function maybeFinish(progress) {
-        if (progress >= 1 && !seqDone) {
+      function checkDone(p) {
+        if (p >= 1 && !seqDone) {
           seqDone = true;
           setTimeout(function () {
-            var hero = document.getElementById('services');
+            var hero = document.getElementById('hero');
             if (hero) hero.scrollIntoView({ behavior: 'smooth' });
           }, 350);
         }
       }
 
-      // ── Throttled scroll handler via rAF ─────────────────────────
+      /* rAF-throttled scroll handler */
       var rafPending = false;
-
       function onScroll() {
         if (!ready || rafPending) return;
         rafPending = true;
-
         requestAnimationFrame(function () {
           rafPending = false;
-          var progress = getProgress();
-
-          paintFrame(getFrameIndex());
-
-          // Text overlay fades in at 65% scroll progress
-          var overlayVisible = progress >= 0.65;
-          overlay.style.opacity = overlayVisible ? '1' : '0';
-          // Enable button clicks only when overlay is visible
-          if (overlayVisible) overlay.classList.add('active');
-          else overlay.classList.remove('active');
-
-          // Scroll hint disappears once user starts scrolling
-          hint.style.opacity = progress > 0.03 ? '0' : '1';
-
-          maybeFinish(progress);
+          var p = getProgress();
+          paint(getIndex());
+          overlay.style.opacity = p >= 0.70 ? '1' : '0';
+          hint.style.opacity    = p > 0.03  ? '0' : '1';
+          checkDone(p);
         });
       }
 
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', resizeCanvas, { passive: true });
+      window.addEventListener('scroll', onScroll,     { passive: true });
+      window.addEventListener('resize', resizeCanvas,  { passive: true });
 
-      // Hide hint if page was reloaded mid-scroll
+      /* Hide hint if page reloaded mid-scroll */
       if (window.scrollY > 20) hint.style.opacity = '0';
 
     })();
-  </script>
 
+  </script>
 </body>
 </html>
