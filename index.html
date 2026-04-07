@@ -40,17 +40,17 @@
     }
 
     :root {
-      --primary:    #F5A623;
-      --primary-dark: #d48b10;
+      --primary:    #000000;
+      --primary-dark: #333333;
       --secondary:  #1A1A1A;
       --bg:         #FFFFFF;
-      --bg-alt:     #F9F9F9;
-      --text:       #333333;
+      --bg-alt:     #F5F5F5;
+      --text:       #1A1A1A;
       --text-light: #666666;
       --white:      #FFFFFF;
       --shadow:     0 4px 24px rgba(0,0,0,0.08);
       --shadow-md:  0 8px 32px rgba(0,0,0,0.12);
-      --radius-sm:  6px;
+      --radius-sm:  4px;
       --radius-md:  12px;
       --transition: 0.3s ease;
       --nav-h:      72px;
@@ -117,10 +117,10 @@
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 56px;
-      height: 3px;
-      background: var(--primary);
-      border-radius: 2px;
+      width: 40px;
+      height: 2px;
+      background: #000000;
+      border-radius: 0;
     }
 
     .section-header p {
@@ -180,7 +180,7 @@
 
     .btn-primary {
       background: var(--primary);
-      color: var(--secondary);
+      color: var(--white);
       border-color: var(--primary);
     }
 
@@ -188,18 +188,18 @@
       background: var(--primary-dark);
       border-color: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(245,166,35,0.4);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
     }
 
     .btn-outline {
-      background: transparent;
-      color: var(--white);
-      border-color: var(--white);
+      background: var(--white);
+      color: var(--secondary);
+      border-color: var(--secondary);
     }
 
     .btn-outline:hover {
-      background: var(--white);
-      color: var(--secondary);
+      background: var(--secondary);
+      color: var(--white);
       transform: translateY(-2px);
     }
 
@@ -223,11 +223,9 @@
     }
 
     .nav-logo {
-      font-family: 'Poppins', sans-serif;
-      font-weight: 800;
-      font-size: 1.35rem;
-      color: var(--primary);
-      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      line-height: 0;
     }
 
     .nav-links {
@@ -378,8 +376,8 @@
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(245,166,35,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(245,166,35,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
       background-size: 48px 48px;
     }
 
@@ -417,9 +415,9 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(245,166,35,0.15);
-      border: 1px solid rgba(245,166,35,0.3);
-      color: var(--primary);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
       padding: 6px 16px;
       border-radius: 100px;
       font-size: 0.82rem;
@@ -467,7 +465,7 @@
       font-family: 'Poppins', sans-serif;
       font-size: 0.95rem;
       font-weight: 600;
-      color: var(--primary);
+      color: rgba(255,255,255,0.6);
       letter-spacing: 0.3px;
     }
 
@@ -510,7 +508,7 @@
       height: 48px;
       margin-bottom: 22px;
       display: block;
-      stroke: #F5A623;
+      stroke: #000000;
       transition: transform 0.3s ease;
     }
 
@@ -567,7 +565,7 @@
       flex-shrink: 0;
       width: 52px;
       height: 52px;
-      background: rgba(245,166,35,0.12);
+      background: rgba(0,0,0,0.06);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -577,16 +575,22 @@
     .why-icon i {
       width: 40px;
       height: 40px;
-      stroke: #F5A623;
+      stroke: #000000;
     }
 
     /* Small contact/footer icons */
     .icon-sm {
       width: 20px;
       height: 20px;
-      stroke: #F5A623;
+      stroke: #000000;
       flex-shrink: 0;
       vertical-align: middle;
+    }
+
+    /* Icons inside dark containers use white stroke */
+    .contact-info-icon .icon-sm,
+    .footer-contact-col .icon-sm {
+      stroke: #FFFFFF;
     }
 
     .why-body h3 {
@@ -623,8 +627,8 @@
     }
 
     .zone-tag {
-      background: var(--primary);
-      color: var(--secondary);
+      background: #000000;
+      color: #FFFFFF;
       font-family: 'Poppins', sans-serif;
       font-weight: 600;
       font-size: 0.88rem;
@@ -724,7 +728,7 @@
     .form-group select:focus,
     .form-group textarea:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(245,166,35,0.15);
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
     }
 
     .form-group textarea {
@@ -826,7 +830,7 @@
       font-size: 1.5rem;
       width: 48px;
       height: 48px;
-      background: rgba(245,166,35,0.15);
+      background: rgba(255,255,255,0.1);
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -887,7 +891,7 @@
       font-family: 'Poppins', sans-serif;
       font-weight: 800;
       font-size: 1.4rem;
-      color: var(--primary);
+      color: #FFFFFF;
     }
 
     .footer-contact-col h4,
@@ -911,10 +915,10 @@
       transition: color var(--transition);
     }
 
-    .footer-contact-col a:hover { color: var(--primary); }
+    .footer-contact-col a:hover { color: #FFFFFF; }
 
     .footer-tagline-col p {
-      color: var(--primary);
+      color: rgba(255,255,255,0.75);
       font-family: 'Poppins', sans-serif;
       font-weight: 600;
       font-size: 1.05rem;
@@ -1058,7 +1062,7 @@
       font-family: 'Poppins', sans-serif;
       font-size: 3rem;
       font-weight: 800;
-      color: var(--primary);
+      color: #FFFFFF;
       line-height: 1;
       margin-bottom: 10px;
       letter-spacing: -1px;
@@ -1146,9 +1150,9 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(245,166,35,0.2);
-      border: 1px solid rgba(245,166,35,0.45);
-      color: #F5A623;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #FFFFFF;
       padding: 6px 16px;
       border-radius: 100px;
       font-family: 'Poppins', sans-serif;
@@ -1169,7 +1173,7 @@
       text-shadow: 0 2px 16px rgba(0,0,0,0.9);
     }
 
-    #seq-overlay h1 span { color: #F5A623; }
+    #seq-overlay h1 span { color: #FFFFFF; }
 
     #seq-overlay h2 {
       font-family: 'Poppins', sans-serif;
@@ -1200,7 +1204,7 @@
       font-family: 'Poppins', sans-serif;
       font-size: 0.88rem;
       font-weight: 600;
-      color: #F5A623;
+      color: rgba(255,255,255,0.6);
       letter-spacing: 0.3px;
     }
 
@@ -1241,8 +1245,8 @@
     .seq-spinner {
       width: 44px;
       height: 44px;
-      border: 3px solid rgba(245,166,35,0.2);
-      border-top-color: #F5A623;
+      border: 3px solid rgba(255,255,255,0.15);
+      border-top-color: #FFFFFF;
       border-radius: 50%;
       animation: seq-spin 0.9s linear infinite;
     }
@@ -1334,7 +1338,9 @@
   ============================================================ -->
   <nav class="navbar" id="navbar">
     <div class="container">
-      <a href="#services" class="nav-logo">SK38 Nettoyage</a>
+      <a href="#services" class="nav-logo">
+        <img src="images/SK38_FINAL_LOGO.png" alt="SK38 Nettoyage" height="50" style="width:auto;height:50px;display:block;filter:invert(1);" />
+      </a>
 
       <ul class="nav-links" id="navLinks">
         <li><a href="#services"  class="nav-link">Services</a></li>
@@ -1612,11 +1618,11 @@
             <p style="font-family:'Poppins',sans-serif;font-weight:700;font-size:0.82rem;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:16px;">Contact direct</p>
             <p style="display:flex;align-items:center;gap:10px;font-size:0.95rem;font-weight:600;margin-bottom:10px;">
               <i data-lucide="phone" class="icon-sm"></i>
-              <a href="tel:+33651799245" style="color:var(--secondary);transition:color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--secondary)'">06 51 79 92 45</a>
+              <a href="tel:+33651799245" style="color:var(--secondary);transition:color 0.2s;" onmouseover="this.style.color='#000000'" onmouseout="this.style.color='var(--secondary)'">06 51 79 92 45</a>
             </p>
             <p style="display:flex;align-items:center;gap:10px;font-size:0.95rem;font-weight:600;margin-bottom:12px;">
               <i data-lucide="mail" class="icon-sm"></i>
-              <a href="mailto:skgrenoble17@gmail.com" style="color:var(--secondary);transition:color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--secondary)'">skgrenoble17@gmail.com</a>
+              <a href="mailto:skgrenoble17@gmail.com" style="color:var(--secondary);transition:color 0.2s;" onmouseover="this.style.color='#000000'" onmouseout="this.style.color='var(--secondary)'">skgrenoble17@gmail.com</a>
             </p>
             <p style="color:var(--text-light);font-size:0.85rem;">Disponible du lundi au samedi, de 8h à 19h</p>
           </div>
