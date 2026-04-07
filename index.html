@@ -1115,7 +1115,7 @@
        SEQUENCE INTRO — scroll-driven 120-frame animation
     ================================================================ */
     (function () {
-      var TOTAL    = 120;
+      var TOTAL    = 80;
       var wrapper  = document.getElementById('seq-wrapper');
       var sticky   = document.getElementById('seq-sticky');
       var canvas   = document.getElementById('seq-canvas');
@@ -1130,7 +1130,7 @@
       var images = [];
       for (var i = 0; i < TOTAL; i++) {
         var img = new Image();
-        img.src = 'sequence/frame_' + String(i).padStart(3, '0') + '_delay-0.066s.png';
+        img.src = 'sequence/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.png';
         images.push(img);
       }
 
@@ -1184,7 +1184,7 @@
 
       /* Frame index: progress mapped to 0–119 */
       function getIndex() {
-        return Math.min(Math.floor(getProgress() * (TOTAL - 1)), TOTAL - 1);
+        return Math.min(Math.floor(getProgress() * 79), 79);
       }
 
       /* Auto-scroll to hero when sequence completes */
