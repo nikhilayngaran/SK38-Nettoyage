@@ -469,23 +469,50 @@
 
     #seq-overlay {
       position: absolute; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      display: flex; align-items: center;
       z-index: 10; pointer-events: none;
       opacity: 0;
-    }
-    #seq-overlay h2 {
-      font-family: 'Poppins', sans-serif; font-size: clamp(2.2rem, 5.5vw, 4rem);
-      font-weight: 800; color: var(--white); margin: 0 0 14px;
-      text-shadow: 0 2px 32px rgba(0,0,0,0.8); text-align: center;
-    }
-    #seq-overlay p {
-      font-family: 'Inter', sans-serif; font-size: clamp(1rem, 2vw, 1.2rem);
-      color: rgba(255,255,255,0.85); margin: 0;
-      text-shadow: 0 1px 16px rgba(0,0,0,0.7); text-align: center;
+      /* Dark gradient so text is always readable over the frames */
+      background: linear-gradient(to right, rgba(0,0,0,0.78) 45%, rgba(0,0,0,0.18) 100%);
     }
 
-    /* Fade-to-white veil over canvas at end of sequence */
+    /* Hero content inside the overlay */
+    #seq-overlay .container { width: min(1160px, 100% - 2.5rem); margin-inline: auto; }
+    #seq-overlay .hero-content { max-width: 680px; }
+
+    #seq-overlay .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white); padding: 6px 16px; border-radius: 100px;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.5px;
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+    #seq-overlay h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 4.5rem); font-weight: 800;
+      color: var(--white); line-height: 1.1; margin-bottom: 18px;
+    }
+    #seq-overlay h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem); font-weight: 500;
+      color: rgba(255,255,255,0.8); margin-bottom: 22px;
+    }
+    #seq-overlay .hero-body {
+      font-size: 1.05rem; color: rgba(255,255,255,0.65);
+      max-width: 520px; margin-bottom: 40px; line-height: 1.75;
+    }
+    #seq-overlay .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 32px; }
+    #seq-overlay .hero-tagline {
+      font-family: 'Poppins', sans-serif; font-size: 0.95rem;
+      font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 0.3px;
+    }
+    /* Button colours on dark canvas */
+    #seq-overlay .btn-primary { background: var(--white); color: var(--black); border-color: var(--white); }
+    #seq-overlay .btn-primary:hover { background: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.9); transform: translateY(-2px); }
+    #seq-overlay .btn-outline { background: transparent; color: var(--white); border-color: rgba(255,255,255,0.7); }
+    #seq-overlay .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: var(--white); transform: translateY(-2px); }
+
+    /* Fade-to-white veil at the very end of the sequence */
     #seq-fadeout {
       position: absolute; inset: 0;
       background: #ffffff;
@@ -548,15 +575,29 @@
   <!-- ============================================================
        SEQUENCE INTRO (300vh scroll driver)
   ============================================================ -->
+  <div id="hero" style="position:absolute;top:0;height:0;"></div>
   <div id="seq-wrapper">
     <div id="seq-sticky">
       <canvas id="seq-canvas"></canvas>
-      <!-- Text overlay: fades in at 70% scroll progress -->
+
+      <!-- Hero overlay: fades in over the last frames of the animation -->
       <div id="seq-overlay">
-        <h2>SK38 Nettoyage</h2>
-        <p>Votre partenaire propreté à Grenoble</p>
+        <div class="container">
+          <div class="hero-content">
+            <div class="hero-badge">🧹 Grenoble &amp; Isère</div>
+            <h1>SK38 Nettoyage</h1>
+            <h2>Votre partenaire propreté à Grenoble</h2>
+            <p class="hero-body">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
+            <div class="hero-ctas">
+              <a href="#contact" class="btn btn-primary">Demander un devis</a>
+              <a href="#contact" class="btn btn-outline">Être rappelé</a>
+            </div>
+            <p class="hero-tagline">La propreté qui fait la différence !</p>
+          </div>
+        </div>
       </div>
-      <!-- Fade-to-white veil: ramps in from 80%→100% progress -->
+
+      <!-- Fade-to-white veil: ramps in at end of sequence -->
       <div id="seq-fadeout"></div>
     </div>
   </div>
@@ -596,28 +637,6 @@
       </button>
     </div>
   </nav>
-
-  <!-- ============================================================
-       HERO
-  ============================================================ -->
-  <section class="hero" id="hero">
-    <div class="hero-overlay"></div>
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-badge hero-animate hero-animate--1">
-          🧹 Grenoble &amp; Isère
-        </div>
-        <h1 class="hero-animate hero-animate--2">SK38 Nettoyage</h1>
-        <h2 class="hero-animate hero-animate--3">Votre partenaire propreté à Grenoble</h2>
-        <p class="hero-body hero-animate hero-animate--4">Des espaces propres, sains et accueillants — pour que vous puissiez vous concentrer sur l'essentiel.</p>
-        <div class="hero-ctas hero-animate hero-animate--5">
-          <a href="#contact" class="btn btn-primary">Demander un devis</a>
-          <a href="#contact" class="btn btn-outline">Être rappelé</a>
-        </div>
-        <p class="hero-tagline hero-animate hero-animate--6">La propreté qui fait la différence !</p>
-      </div>
-    </div>
-  </section>
 
   <!-- ============================================================
        SERVICES
@@ -1187,18 +1206,6 @@
         return Math.min(Math.floor(getProgress() * 79), 79);
       }
 
-      /* Auto-scroll to hero when sequence completes */
-      var seqDone = false;
-      function checkDone(p) {
-        if (p >= 1 && !seqDone) {
-          seqDone = true;
-          setTimeout(function () {
-            var hero = document.getElementById('hero');
-            if (hero) hero.scrollIntoView({ behavior: 'smooth' });
-          }, 350);
-        }
-      }
-
       /* rAF-throttled scroll handler */
       var rafPending = false;
       function onScroll() {
@@ -1209,16 +1216,17 @@
           var p = getProgress();
           paint(getIndex());
 
-          /* Text overlay: fade in from 65%→75% */
-          overlay.style.opacity = Math.min(Math.max((p - 0.65) / 0.10, 0), 1);
+          /* Hero overlay: fade in from 68%→80% */
+          var overlayAmt = Math.min(Math.max((p - 0.68) / 0.12, 0), 1);
+          overlay.style.opacity = overlayAmt;
+          /* Enable pointer-events once overlay is substantially visible */
+          overlay.style.pointerEvents = overlayAmt >= 0.85 ? 'auto' : 'none';
 
-          /* Fade-to-white veil: starts at 82%, fully white by 100% */
-          var fadeAmt = Math.min(Math.max((p - 0.82) / 0.18, 0), 1);
-          /* Ease-in cubic so the fade feels gradual at first */
+          /* Fade-to-white veil: starts at 88%, fully white by 100% */
+          var fadeAmt = Math.min(Math.max((p - 0.88) / 0.12, 0), 1);
           fadeout.style.opacity = fadeAmt * fadeAmt * fadeAmt;
 
           hint.style.opacity = p > 0.03 ? '0' : '1';
-          checkDone(p);
         });
       }
 
