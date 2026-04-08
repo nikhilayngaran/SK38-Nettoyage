@@ -1175,7 +1175,7 @@
               loaderTxt.textContent = 'Chargement\u2026 ' + Math.round(pct * 100) + '%';
               if (loaded === TOTAL) onReady();
             };
-            img.src = 'sequence/frame_' + String(idx).padStart(2, '0') + '_delay-0.1s.png';
+            img.src = 'sequence/ezgif-frame-' + String(idx + 1).padStart(3, '0') + '.png';
           })(i);
         }
       });
