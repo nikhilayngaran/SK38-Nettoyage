@@ -520,6 +520,14 @@
       z-index: 20;
     }
 
+    /* Progress bar */
+    #seq-progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+      background: var(--black); z-index: 4000;
+      transition: width 0.15s ease, opacity 0.4s ease 0.2s;
+    }
+    #seq-progress-bar.done { width: 100% !important; opacity: 0; }
+
     /* Loading screen */
     #seq-loader {
       position: fixed; inset: 0; background: var(--dark); z-index: 3000;
@@ -563,6 +571,9 @@
 </head>
 
 <body>
+
+  <!-- Progress bar -->
+  <div id="seq-progress-bar"></div>
 
   <!-- ============================================================
        LOADING SCREEN
@@ -618,7 +629,7 @@
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="#hero" class="nav-logo">
-        <img src="images/SK38 FINAL LOGO.png" alt="SK38 Nettoyage" height="40" />
+        <img src="images/SK38 FINAL LOGO.png" alt="SK38 Nettoyage" height="40" loading="lazy" />
       </a>
 
       <ul class="nav-links" id="navLinks">
@@ -1131,45 +1142,53 @@
     lucide.createIcons();
 
     /* ================================================================
-       SEQUENCE INTRO — scroll-driven 120-frame animation
+       SEQUENCE INTRO — scroll-driven 80-frame animation
     ================================================================ */
     (function () {
-      var TOTAL    = 80;
-      var wrapper  = document.getElementById('seq-wrapper');
-      var sticky   = document.getElementById('seq-sticky');
-      var canvas   = document.getElementById('seq-canvas');
-      var overlay  = document.getElementById('seq-overlay');
-      var fadeout  = document.getElementById('seq-fadeout');
-      var loader   = document.getElementById('seq-loader');
-      var loaderTxt= document.getElementById('seq-loader-text');
-      var hint     = document.getElementById('seq-hint');
-      var ctx      = canvas.getContext('2d');
+      var TOTAL      = 80;
+      var wrapper    = document.getElementById('seq-wrapper');
+      var sticky     = document.getElementById('seq-sticky');
+      var canvas     = document.getElementById('seq-canvas');
+      var overlay    = document.getElementById('seq-overlay');
+      var fadeout    = document.getElementById('seq-fadeout');
+      var loader     = document.getElementById('seq-loader');
+      var loaderTxt  = document.getElementById('seq-loader-text');
+      var progressBar= document.getElementById('seq-progress-bar');
+      var hint       = document.getElementById('seq-hint');
+      var ctx        = canvas.getContext('2d');
 
-      /* Build image array */
-      var images = [];
-      for (var i = 0; i < TOTAL; i++) {
-        var img = new Image();
-        img.src = 'sequence/frame_' + String(i).padStart(2, '0') + '_delay-0.1s.png';
-        images.push(img);
-      }
+      var images     = new Array(TOTAL);
+      var loaded     = 0;
+      var ready      = false;
+      var lastIndex  = -1; /* track last drawn frame — skip redraw if unchanged */
 
-      /* Preload all frames */
-      var loaded = 0, ready = false;
-
-      images.forEach(function (img) {
-        function done() {
-          loaded++;
-          loaderTxt.textContent = 'Chargement\u2026 ' + Math.round(loaded / TOTAL * 100) + '%';
-          if (loaded === TOTAL) onReady();
+      /* ---- Start preloading only after all page assets are ready ---- */
+      window.addEventListener('load', function () {
+        for (var i = 0; i < TOTAL; i++) {
+          (function (idx) {
+            var img = new Image();
+            img.onload = img.onerror = function () {
+              images[idx] = img;
+              loaded++;
+              var pct = loaded / TOTAL;
+              progressBar.style.width = (pct * 100) + '%';
+              loaderTxt.textContent = 'Chargement\u2026 ' + Math.round(pct * 100) + '%';
+              if (loaded === TOTAL) onReady();
+            };
+            img.src = 'sequence/frame_' + String(idx).padStart(2, '0') + '_delay-0.1s.png';
+          })(i);
         }
-        img.onload  = done;
-        img.onerror = done; /* count errors so we never hang */
       });
 
       function onReady() {
         ready = true;
+        /* Hide loader */
         loader.classList.add('hidden');
         setTimeout(function () { loader.style.display = 'none'; }, 700);
+        /* Hide progress bar */
+        progressBar.classList.add('done');
+        setTimeout(function () { progressBar.style.display = 'none'; }, 700);
+
         resizeCanvas();
         paint(0);
         setTimeout(function () {
@@ -1177,36 +1196,38 @@
         }, 900);
       }
 
-      /* Canvas sizing */
+      /* ---- Canvas sizing ---- */
       function resizeCanvas() {
         canvas.width  = sticky.offsetWidth;
         canvas.height = sticky.offsetHeight;
+        lastIndex = -1; /* force repaint after resize */
         if (ready) paint(getIndex());
       }
 
-      /* Cover-fit paint */
+      /* ---- Cover-fit paint — skips if same frame ---- */
       function paint(index) {
+        if (index === lastIndex) return;
+        lastIndex = index;
         var img = images[index];
         if (!img || !img.naturalWidth) return;
-        var cw = canvas.width, ch = canvas.height;
+        var cw = canvas.width,  ch = canvas.height;
         var iw = img.naturalWidth, ih = img.naturalHeight;
         var s  = Math.max(cw / iw, ch / ih);
         ctx.clearRect(0, 0, cw, ch);
         ctx.drawImage(img, (cw - iw * s) / 2, (ch - ih * s) / 2, iw * s, ih * s);
       }
 
-      /* Scroll progress: 0 → 1 across (300vh − 100vh) = 200vh */
+      /* ---- Scroll progress: 0→1 across 200vh ---- */
       function getProgress() {
         var scrollable = wrapper.offsetHeight - window.innerHeight;
         return Math.min(Math.max(window.scrollY / scrollable, 0), 1);
       }
 
-      /* Frame index: progress mapped to 0–119 */
       function getIndex() {
         return Math.min(Math.floor(getProgress() * 79), 79);
       }
 
-      /* rAF-throttled scroll handler */
+      /* ---- rAF-throttled scroll handler ---- */
       var rafPending = false;
       function onScroll() {
         if (!ready || rafPending) return;
@@ -1219,10 +1240,9 @@
           /* Hero overlay: fade in from 68%→80% */
           var overlayAmt = Math.min(Math.max((p - 0.68) / 0.12, 0), 1);
           overlay.style.opacity = overlayAmt;
-          /* Enable pointer-events once overlay is substantially visible */
           overlay.style.pointerEvents = overlayAmt >= 0.85 ? 'auto' : 'none';
 
-          /* Fade-to-white veil: starts at 88%, fully white by 100% */
+          /* Fade-to-white veil: 88%→100% */
           var fadeAmt = Math.min(Math.max((p - 0.88) / 0.12, 0), 1);
           fadeout.style.opacity = fadeAmt * fadeAmt * fadeAmt;
 
@@ -1230,10 +1250,9 @@
         });
       }
 
-      window.addEventListener('scroll', onScroll,     { passive: true });
-      window.addEventListener('resize', resizeCanvas,  { passive: true });
+      window.addEventListener('scroll', onScroll,    { passive: true });
+      window.addEventListener('resize', resizeCanvas, { passive: true });
 
-      /* Hide hint if page reloaded mid-scroll */
       if (window.scrollY > 20) hint.style.opacity = '0';
 
     })();
